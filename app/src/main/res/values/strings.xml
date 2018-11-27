@@ -4,4 +4,8 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="title_activity_storage_unit_list">StorageUnitList</string>
+
+    <string name="options">Options</string>
+    <string name="app_title">Storage Tracker</string>
+    <string name="container_edit">Container Edit</string>
 </resources>
