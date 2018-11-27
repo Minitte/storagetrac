@@ -9,4 +9,5 @@
     <string name="app_title">Storage Tracker</string>
     <string name="container_edit">Container Edit</string>
     <string name="container_icon">Container Icon</string>
+    <string name="delete_icon">Delete Icon</string>
 </resources>
