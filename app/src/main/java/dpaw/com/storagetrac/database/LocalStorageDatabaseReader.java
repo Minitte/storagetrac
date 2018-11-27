@@ -8,7 +8,6 @@ import java.io.ObjectInputStream;
 
 public class LocalStorageDatabaseReader {
 
-    private static final android.util.Log Log = ;
     /**
      * Path to file
      */
