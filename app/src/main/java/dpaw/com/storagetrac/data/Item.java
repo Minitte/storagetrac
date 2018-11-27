@@ -108,7 +108,7 @@ public class Item {
 
         Item i = (Item)obj;
 
-        return _name.equalsIgnoreCase(i._name) && _expiryDate.equals(i._expiryDate);
+        return _id == i._id;
     }
 
     /**
@@ -118,15 +118,6 @@ public class Item {
      */
     public int get_id() {
         return _id;
-    }
-
-    /**
-     * Sets the _id
-     *
-     * @param _id set _id to this value
-     */
-    public void set_id(int _id) {
-        this._id = _id;
     }
 
     /**

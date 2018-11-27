@@ -1,12 +1,18 @@
 package dpaw.com.storagetrac.data;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
  * A storage unit containing a list of items
  */
 public class StorageUnit {
+
+    /**
+     * id of the storage unit
+     */
+    private int _id;
 
     /**
      * Name of the storage unit
@@ -27,6 +33,9 @@ public class StorageUnit {
         this._name = name;
 
         _items = new ArrayList<>();
+
+        String hashString = Calendar.getInstance().getTime().toString() + name;
+        _id = hashString.hashCode();
     }
 
     /**
@@ -34,7 +43,7 @@ public class StorageUnit {
      * @param item the item to add
      */
     public void add(Item item) {
-        Item match = findItemByNameAndExpiry(item);
+        Item match = findItemByID(item);
 
         if (match == null) {
             _items.add(item);
@@ -49,7 +58,7 @@ public class StorageUnit {
      * @return if the item removal was successful
      */
     public boolean remove(Item item) {
-        Item match = findItemByNameAndExpiry(item);
+        Item match = findItemByID(item);
 
         if (match != null) {
             _items.remove(match);
@@ -60,11 +69,27 @@ public class StorageUnit {
     }
 
     /**
-     * Searches the list of a matching item by name and expiry date
-     * @param item item to search for
-     * @return returns the item that matches or a null if none found
+     * Attempts to remove the item from the list
+     * @param id id of the item to remove
+     * @return if the item removal was successful
      */
-    public Item findItemByNameAndExpiry(Item item) {
+    public boolean remove(int id) {
+        Item match = findItemByID(id);
+
+        if (match != null) {
+            _items.remove(match);
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Searches the list of a matching item by id
+     * @param item item to search for
+     * @return returns the first item that matches or a null if none found
+     */
+    public Item findItemByID(Item item) {
         // search for item
         for (Item cur : _items) {
             // compare by name and expiry
@@ -77,9 +102,26 @@ public class StorageUnit {
     }
 
     /**
+     * Searches the list of a matching item by id
+     * @param id id of the storage unit to remove
+     * @return returns the first item that matches or a null if none found
+     */
+    public Item findItemByID(int id) {
+        // search for item
+        for (Item cur : _items) {
+            // compare by name and expiry
+            if (cur.get_id() == id) {
+                return cur;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Searches the list of matching item by name
      * @param item item to search for
-     * @return returns the item that matches or a null if none found
+     * @return returns the first item that matches or a null if none found
      */
     public Item findItemByName(Item item) {
         // search for item
@@ -91,6 +133,32 @@ public class StorageUnit {
         }
 
         return null;
+    }
+
+    /**
+     * Override of equals.
+     * Checks if the ids of two storage units match.
+     * @param obj
+     * @return
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null || !(obj instanceof StorageUnit)) {
+            return false;
+        }
+
+        StorageUnit su = (StorageUnit)obj;
+
+        return _id == su._id;
+    }
+
+    /**
+     * Gets the value of _id
+     *
+     * @return a int
+     */
+    public int get_id() {
+        return _id;
     }
 
     /**
