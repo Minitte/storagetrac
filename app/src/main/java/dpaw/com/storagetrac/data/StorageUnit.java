@@ -1,5 +1,6 @@
 package dpaw.com.storagetrac.data;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -7,7 +8,7 @@ import java.util.List;
 /**
  * A storage unit containing a list of items
  */
-public class StorageUnit {
+public class StorageUnit implements Serializable {
 
     /**
      * id of the storage unit

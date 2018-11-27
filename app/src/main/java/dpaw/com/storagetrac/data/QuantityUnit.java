@@ -1,6 +1,8 @@
 package dpaw.com.storagetrac.data;
 
-public enum QuantityUnit {
+import java.io.Serializable;
+
+public enum QuantityUnit implements Serializable {
 
     UNIT(""),
 

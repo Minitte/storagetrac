@@ -1,11 +1,12 @@
 package dpaw.com.storagetrac.database;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import dpaw.com.storagetrac.data.StorageUnit;
 
-public class StorageUnitDatabase {
+public class StorageUnitDatabase implements Serializable {
 
     /**
      * List of storage units
