@@ -1,11 +1,12 @@
 package dpaw.com.storagetrac.data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * A class that represents an item that is stored in a storage unit
  */
-public class Item {
+public class Item implements Serializable {
 
     /**
      * id of the item
