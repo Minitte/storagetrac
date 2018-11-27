@@ -51,7 +51,7 @@
         app:srcCompat="@drawable/ic_settings_black_24dp" />
 
     <ImageButton
-        android:id="@+id/containerEdit"
+        android:id="@+id/storageEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -65,7 +65,7 @@
         app:srcCompat="@drawable/ic_edit_black_24dp" />
 
     <ImageButton
-        android:id="@+id/containerEditDone"
+        android:id="@+id/storageEditDone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"

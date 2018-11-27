@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -17,60 +16,60 @@ import dpaw.com.storagetrac.StorageUnitList;
 import dpaw.com.storagetrac.data.StorageUnit;
 
 /**
- * Class for providing adapter functionality to the container recycler view.
+ * Class for providing adapter functionality to the storage unit recycler view.
  */
-public class ContainerAdapter extends RecyclerView.Adapter<ContainerAdapter.ContainerViewHolder> {
+public class StorageUnitAdapter extends RecyclerView.Adapter<StorageUnitAdapter.StorageUnitViewHolder> {
 
     /**
-     * List of container names.
+     * List of storage units.
      */
-    private ArrayList<String> _containerNames;
+    private ArrayList<StorageUnit> _storageUnits;
 
-    public static class ContainerViewHolder extends RecyclerView.ViewHolder {
-        // List of data that's contained in each container list item
+    public static class StorageUnitViewHolder extends RecyclerView.ViewHolder {
+        // List of data that's contained in each storage unit
         public ImageView image;
-        public TextView textView;
+        public TextView name;
         public ImageButton deleteButton;
 
         /**
          * Constructor for creating a new list item view.
          * @param itemView The list item view to add
          */
-        public ContainerViewHolder(View itemView) {
+        public StorageUnitViewHolder(View itemView) {
             super(itemView);
-            image = itemView.findViewById(R.id.containerImage);
-            textView = itemView.findViewById(R.id.containerTitle);
+            image = itemView.findViewById(R.id.storageUnitImage);
+            name = itemView.findViewById(R.id.storageUnitName);
             deleteButton = itemView.findViewById(R.id.deleteButton);
         }
     }
 
     /**
      * Constructor.
-     * @param containerNames the list of container names
+     * @param storageUnits the list of storage units
      */
-    public ContainerAdapter(ArrayList<String> containerNames) {
-        _containerNames = containerNames;
+    public StorageUnitAdapter(ArrayList<StorageUnit> storageUnits) {
+        _storageUnits = storageUnits;
     }
 
     @NonNull
     @Override
-    public ContainerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public StorageUnitViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // Create a new view based off of the list item view
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.storage_unit_list_item, parent, false);
 
-        // Add the view to the container list
-        ContainerViewHolder vh = new ContainerViewHolder(v);
+        // Add the view to the storage unit list
+        StorageUnitViewHolder vh = new StorageUnitViewHolder(v);
         return vh;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ContainerViewHolder holder, final int position) {
-        holder.textView.setText(_containerNames.get(position)); // Set the container name
+    public void onBindViewHolder(@NonNull StorageUnitViewHolder holder, final int position) {
+        holder.name.setText(_storageUnits.get(position).get_name()); // Set the storage unit name
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                _containerNames.remove(position); // Remove this item
+                _storageUnits.remove(position); // Remove this item
                 notifyDataSetChanged(); // Tell the adapter to update
             }
         });
@@ -84,7 +83,6 @@ public class ContainerAdapter extends RecyclerView.Adapter<ContainerAdapter.Cont
 
     @Override
     public int getItemCount() {
-        return _containerNames.size();
+        return _storageUnits.size();
     }
-
 }

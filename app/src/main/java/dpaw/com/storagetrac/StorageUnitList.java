@@ -5,13 +5,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import dpaw.com.storagetrac.database.ContainerAdapter;
+import dpaw.com.storagetrac.data.StorageUnit;
+import dpaw.com.storagetrac.database.StorageUnitAdapter;
 
 public class StorageUnitList extends AppCompatActivity {
 
@@ -21,33 +21,25 @@ public class StorageUnitList extends AppCompatActivity {
     public static boolean editing;
 
     /***
-     * List of container names.
+     * List of storage units.
      */
-    private ArrayList<String> _containerNames;
+    private ArrayList<StorageUnit> _storageUnits;
 
     /**
      * Storage unit adapter for the recycler view.
      */
-    private ContainerAdapter _containerAdapter;
+    private StorageUnitAdapter _storageUnitAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_storage_unit_list);
-        _containerNames = new ArrayList<>();
+        _storageUnits = new ArrayList<>();
 
         // For testing purposes
-        _containerNames.add("Container 1");
-        _containerNames.add("Container 2");
-        _containerNames.add("Container 3");
-        _containerNames.add("Container 4");
-        _containerNames.add("Container 5");
-        _containerNames.add("Container 6");
-        _containerNames.add("Container 7");
-        _containerNames.add("Container 8");
-        _containerNames.add("Container 9");
-        _containerNames.add("Container 10");
-        _containerNames.add("Container 11");
+        for (int i = 0; i < 20; i++) {
+            _storageUnits.add(new StorageUnit("Storage Unit " + i));
+        }
 
         // Initialize the view
         initRecyclerView();
@@ -59,10 +51,10 @@ public class StorageUnitList extends AppCompatActivity {
      * Automatically updates as new list items are added.
      */
     private void initRecyclerView() {
-        RecyclerView containerView = findViewById(R.id.containerView);
-        _containerAdapter = new ContainerAdapter(_containerNames);
-        containerView.setAdapter(_containerAdapter);
-        containerView.setLayoutManager(new LinearLayoutManager(this));
+        RecyclerView recyclerView = findViewById(R.id.storageView);
+        _storageUnitAdapter = new StorageUnitAdapter(_storageUnits);
+        recyclerView.setAdapter(_storageUnitAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     /**
@@ -77,7 +69,7 @@ public class StorageUnitList extends AppCompatActivity {
             }
         });
 
-        ImageButton editButton = findViewById(R.id.containerEdit);
+        ImageButton editButton = findViewById(R.id.storageEdit);
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,7 +77,7 @@ public class StorageUnitList extends AppCompatActivity {
             }
         });
 
-        ImageButton editDoneButton = findViewById(R.id.containerEditDone);
+        ImageButton editDoneButton = findViewById(R.id.storageEditDone);
         editDoneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -104,10 +96,10 @@ public class StorageUnitList extends AppCompatActivity {
         String displayText = editing ? "Toggled editing on" : "Toggled editing off";
         Toast.makeText(getApplicationContext(), displayText, Toast.LENGTH_SHORT).show();
 
-        _containerAdapter.notifyDataSetChanged(); // Tell the adapter to update
+        _storageUnitAdapter.notifyDataSetChanged(); // Tell the adapter to update
 
-        ImageButton editButton = findViewById(R.id.containerEdit);
-        ImageButton editDoneButton = findViewById(R.id.containerEditDone);
+        ImageButton editButton = findViewById(R.id.storageEdit);
+        ImageButton editDoneButton = findViewById(R.id.storageEditDone);
 
         // Toggle visibility of edit buttons
         if (editing) {
