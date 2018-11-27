@@ -23,6 +23,10 @@ public class LocalStorageDatabaseWriter {
         this._path = path;
     }
 
+    /**
+     * Writes the database to the path
+     * @param db
+     */
     public void write(StorageUnitDatabase db) {
         try {
             // open stream
