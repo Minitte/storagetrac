@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "123038763744-6rvp5auucjjjv3sf9or32rtdkee9v7v2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "dpaw.com.storagetrac",
+            "certificate_hash": "d4bd223b2c37d33884acbdc4893d511a446ff022"
+          }
+        },
+        {
           "client_id": "123038763744-47au6n05nlgndb033ldpjpq08m4lqduk.apps.googleusercontent.com",
           "client_type": 3
         }
