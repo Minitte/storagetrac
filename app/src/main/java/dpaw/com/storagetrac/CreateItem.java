@@ -25,9 +25,14 @@ import dpaw.com.storagetrac.data.StorageUnit;
 import dpaw.com.storagetrac.ui.DatePickerFragment;
 import dpaw.com.storagetrac.ui.ItemDialogFragment;
 import dpaw.com.storagetrac.ui.ItemDialogListener;
+import dpaw.com.storagetrac.ui.QuantityDialogFragment;
+import dpaw.com.storagetrac.ui.QuantityDialogListener;
 import dpaw.com.storagetrac.ui.StorageUnitDialogFragment;
 
-public class CreateItem extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, ItemDialogListener {
+/**
+ * Activity for creating items.
+ */
+public class CreateItem extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, ItemDialogListener, QuantityDialogListener {
 
     /**
      * Name of the item.
@@ -70,6 +75,7 @@ public class CreateItem extends AppCompatActivity implements DatePickerDialog.On
         ImageButton cancelButton = findViewById(R.id.cancel);
         ImageButton pickDate = findViewById(R.id.pickDate);
         ImageButton pickIcon = findViewById(R.id.itemIcon);
+        ImageButton pickUnit = findViewById(R.id.pickUnit);
 
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,6 +121,14 @@ public class CreateItem extends AppCompatActivity implements DatePickerDialog.On
                 icons.show(getFragmentManager(), "Choose an icon");
             }
         });
+
+        pickUnit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                QuantityDialogFragment quantity = new QuantityDialogFragment();
+                quantity.show(getFragmentManager(), "Choose a quantity type");
+            }
+        });
     }
 
     /**
@@ -125,7 +139,7 @@ public class CreateItem extends AppCompatActivity implements DatePickerDialog.On
         EditText nameView = findViewById(R.id.name);
         ImageButton iconView = findViewById(R.id.itemIcon);
         EditText quantityView = findViewById(R.id.quantity);
-        EditText unitView = findViewById(R.id.unit);
+        TextView unitView = findViewById(R.id.unit);
         TextView dateView = findViewById(R.id.date);
 
         // Make sure all required input is not empty
@@ -135,7 +149,6 @@ public class CreateItem extends AppCompatActivity implements DatePickerDialog.On
             _itemName = nameView.getText().toString();
             _itemIcon = getApplicationContext().getResources().getIdentifier(iconView.getTag().toString(), "drawable", getApplicationContext().getPackageName());
             _quantity = Integer.parseInt(quantityView.getText().toString());
-            _unit = QuantityUnit.UNIT; // TODO
 
             return true;
         } else {
@@ -163,5 +176,12 @@ public class CreateItem extends AppCompatActivity implements DatePickerDialog.On
         ImageButton iconView = findViewById(R.id.itemIcon);
         iconView.setImageDrawable(image);
         iconView.setTag(tag);
+    }
+
+    @Override
+    public void selectQuantityUnit(QuantityUnit unit) {
+        _unit = unit;
+        TextView unitView = findViewById(R.id.unit);
+        unitView.setText(unit.abbreviation);
     }
 }

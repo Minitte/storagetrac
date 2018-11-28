@@ -95,10 +95,10 @@ public class StorageUnitAdapter extends RecyclerView.Adapter<StorageUnitAdapter.
             // Display hours if under a day left
             if (daysDiff < 1) {
                 long hoursDiff = TimeUnit.MILLISECONDS.toHours(msDiff);
-                holder.expiry.setText("Expires in " + hoursDiff + " hours");
+                holder.expiry.setText("Expires in " + hoursDiff + " hour(s)");
                 holder.warning.setVisibility(View.VISIBLE); // Show warning
             } else {
-                holder.expiry.setText("Expires in " + daysDiff + " days");
+                holder.expiry.setText("Expires in " + daysDiff + " day(s)");
             }
         }
     }
