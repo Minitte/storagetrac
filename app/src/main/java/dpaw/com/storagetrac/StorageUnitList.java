@@ -1,5 +1,8 @@
 package dpaw.com.storagetrac;
 
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,7 +14,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import dpaw.com.storagetrac.data.StorageUnit;
-import dpaw.com.storagetrac.database.StorageUnitAdapter;
+import dpaw.com.storagetrac.ui.StorageUnitAdapter;
+import dpaw.com.storagetrac.ui.StorageUnitDialogFragment;
 
 public class StorageUnitList extends AppCompatActivity {
 
@@ -77,11 +81,11 @@ public class StorageUnitList extends AppCompatActivity {
             }
         });
 
-        ImageButton editDoneButton = findViewById(R.id.storageEditDone);
-        editDoneButton.setOnClickListener(new View.OnClickListener() {
+        ImageButton addStorageButton = findViewById(R.id.storageUnitCreate);
+        addStorageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toggleEditMode();
+                createNewStorageUnit();
             }
         });
     }
@@ -99,16 +103,57 @@ public class StorageUnitList extends AppCompatActivity {
         _storageUnitAdapter.notifyDataSetChanged(); // Tell the adapter to update
 
         ImageButton editButton = findViewById(R.id.storageEdit);
-        ImageButton editDoneButton = findViewById(R.id.storageEditDone);
+        ImageButton createNewButton = findViewById(R.id.storageUnitCreate);
 
-        // Toggle visibility of edit buttons
+        // Toggle visibilities and images
         if (editing) {
-            editButton.setVisibility(View.INVISIBLE);
-            editDoneButton.setVisibility(View.VISIBLE);
+            editButton.setImageDrawable(GetDrawable(getApplicationContext(), "ic_check_black_24dp"));
+            createNewButton.setVisibility(View.VISIBLE);
         } else {
-            editButton.setVisibility(View.VISIBLE);
-            editDoneButton.setVisibility(View.INVISIBLE);
+            editButton.setImageDrawable(GetDrawable(getApplicationContext(), "ic_edit_black_24dp"));
+            createNewButton.setVisibility(View.INVISIBLE);
         }
+    }
+
+    /**
+     * Starts the create storage unit activity.
+     */
+    private void createNewStorageUnit() {
+        Intent intent = new Intent(this, CreateStorageUnitActivity.class);
+        startActivityForResult(intent, 1);
+    }
+
+    /**
+     * Adds a new storage unit to the list of storage units.
+     * @param storageUnit the storage unit to add
+     */
+    private void addStorageUnit(StorageUnit storageUnit) {
+        _storageUnits.add(storageUnit);
+        _storageUnitAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * Currently used to get data back from other activities.
+     */
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if(resultCode == RESULT_OK) {
+                // Add the new storage unit
+                StorageUnit newStorageUnit = (StorageUnit)data.getSerializableExtra("unit");
+                addStorageUnit(newStorageUnit);
+            }
+        }
+    }
+
+    /**
+     * Returns a drawable by name.
+     * @param c context of the application
+     * @param ImageName the name of the drawable
+     * @return the drawable object if found
+     */
+    public static Drawable GetDrawable(Context c, String ImageName) {
+        return c.getResources().getDrawable(c.getResources().getIdentifier(ImageName, "drawable", c.getPackageName()));
     }
 
 }

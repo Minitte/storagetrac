@@ -1,4 +1,4 @@
-package dpaw.com.storagetrac.database;
+package dpaw.com.storagetrac.ui;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;

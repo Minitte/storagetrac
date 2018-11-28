@@ -7,7 +7,13 @@
 
     <string name="options">Options</string>
     <string name="app_title">Storage Tracker</string>
-    <string name="container_edit">Container Edit</string>
-    <string name="container_icon">Container Icon</string>
+    <string name="storage_unit_name">Storage Name</string>
+    <string name="container_edit">Storage Edit</string>
+    <string name="container_icon">Storage Icon</string>
     <string name="delete_icon">Delete Icon</string>
+    <string name="title_activity_create_storage_unit">CreateStorageUnitActivity</string>
+
+    <string name="done">Done</string>
+    <string name="cancel">Cancel</string>
+
 </resources>
