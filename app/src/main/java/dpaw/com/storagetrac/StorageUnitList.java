@@ -12,10 +12,10 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import dpaw.com.storagetrac.data.StorageUnit;
-import dpaw.com.storagetrac.ui.StorageUnitAdapter;
-import dpaw.com.storagetrac.ui.StorageUnitAdapterListener;
+import dpaw.com.storagetrac.ui.StorageUnitListAdapter;
+import dpaw.com.storagetrac.ui.StorageUnitListAdapterListener;
 
-public class StorageUnitList extends AppCompatActivity implements StorageUnitAdapterListener {
+public class StorageUnitList extends AppCompatActivity implements StorageUnitListAdapterListener {
 
     /**
      * Flag for edit state.
@@ -28,9 +28,9 @@ public class StorageUnitList extends AppCompatActivity implements StorageUnitAda
     private ArrayList<StorageUnit> _storageUnits;
 
     /**
-     * Storage unit adapter for the recycler view.
+     * Storage unit list adapter for the recycler view.
      */
-    private StorageUnitAdapter _storageUnitAdapter;
+    private StorageUnitListAdapter _storageUnitListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,8 +54,8 @@ public class StorageUnitList extends AppCompatActivity implements StorageUnitAda
      */
     private void initRecyclerView() {
         RecyclerView recyclerView = findViewById(R.id.storageView);
-        _storageUnitAdapter = new StorageUnitAdapter(_storageUnits, this);
-        recyclerView.setAdapter(_storageUnitAdapter);
+        _storageUnitListAdapter = new StorageUnitListAdapter(_storageUnits, this);
+        recyclerView.setAdapter(_storageUnitListAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
@@ -98,7 +98,7 @@ public class StorageUnitList extends AppCompatActivity implements StorageUnitAda
         String displayText = editing ? "Toggled editing on" : "Toggled editing off";
         Toast.makeText(getApplicationContext(), displayText, Toast.LENGTH_SHORT).show();
 
-        _storageUnitAdapter.notifyDataSetChanged(); // Tell the adapter to update
+        _storageUnitListAdapter.notifyDataSetChanged(); // Tell the adapter to update
 
         ImageButton editButton = findViewById(R.id.storageEdit);
         ImageButton createNewButton = findViewById(R.id.storageUnitCreate);
@@ -127,12 +127,18 @@ public class StorageUnitList extends AppCompatActivity implements StorageUnitAda
      */
     private void addStorageUnit(StorageUnit storageUnit) {
         _storageUnits.add(storageUnit);
-        _storageUnitAdapter.notifyDataSetChanged();
+        _storageUnitListAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void selectStorageUnit(int index) {
+        // Pack the selected storage unit into an intent
         Intent intent = new Intent(this, StorageUnitActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("unit", _storageUnits.get(index));
+        intent.putExtras(bundle);
+
+        // Pass it to the storage unit activity
         startActivity(intent);
     }
 

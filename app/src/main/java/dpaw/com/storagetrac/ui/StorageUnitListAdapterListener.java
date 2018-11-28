@@ -6,7 +6,7 @@ import dpaw.com.storagetrac.data.StorageUnit;
  * Interface for storage unit listeners.
  * Handles communication between storage unit list and activity.
  */
-public interface StorageUnitAdapterListener {
+public interface StorageUnitListAdapterListener {
 
     /**
      * Called when the user selects a storage unit.

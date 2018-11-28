@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 import dpaw.com.storagetrac.R;
 import dpaw.com.storagetrac.StorageUnitList;
+import dpaw.com.storagetrac.data.Item;
 import dpaw.com.storagetrac.data.StorageUnit;
 
 /**
@@ -21,19 +22,16 @@ import dpaw.com.storagetrac.data.StorageUnit;
 public class StorageUnitAdapter extends RecyclerView.Adapter<StorageUnitAdapter.StorageUnitViewHolder> {
 
     /**
-     * List of storage units.
+     * List of items.
      */
-    private ArrayList<StorageUnit> _storageUnits;
+    private ArrayList<Item> _items;
 
-    /**
-     * Listener for the storage unit adapter.
-     */
-    private static StorageUnitAdapterListener _storageUnitAdapterListener;
-
-    public static class StorageUnitViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class StorageUnitViewHolder extends RecyclerView.ViewHolder {
         // List of data that's contained in each storage unit
         public ImageView image;
         public TextView name;
+        public TextView quantity;
+        public ImageView warning;
         public ImageButton deleteButton;
 
         /**
@@ -42,25 +40,20 @@ public class StorageUnitAdapter extends RecyclerView.Adapter<StorageUnitAdapter.
          */
         public StorageUnitViewHolder(View itemView) {
             super(itemView);
-            image = itemView.findViewById(R.id.storageUnitImage);
-            name = itemView.findViewById(R.id.storageUnitName);
+            image = itemView.findViewById(R.id.itemImage);
+            name = itemView.findViewById(R.id.itemName);
+            quantity = itemView.findViewById(R.id.itemQuantity);
+            warning = itemView.findViewById(R.id.warning);
             deleteButton = itemView.findViewById(R.id.deleteButton);
-            itemView.setOnClickListener(this); // Set the on click listener
-        }
-
-        @Override
-        public void onClick(View v) {
-            _storageUnitAdapterListener.selectStorageUnit(this.getAdapterPosition());
         }
     }
 
     /**
      * Constructor.
-     * @param storageUnits the list of storage units
+     * @param storageUnit reference to the storage unit
      */
-    public StorageUnitAdapter(ArrayList<StorageUnit> storageUnits, StorageUnitAdapterListener adapterListener) {
-        _storageUnits = storageUnits;
-        _storageUnitAdapterListener = adapterListener;
+    public StorageUnitAdapter(StorageUnit storageUnit) {
+        _items = new ArrayList<>();
     }
 
     @NonNull
@@ -68,7 +61,7 @@ public class StorageUnitAdapter extends RecyclerView.Adapter<StorageUnitAdapter.
     public StorageUnitViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // Create a new view based off of the list item view
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.storage_unit_list_item, parent, false);
+                .inflate(R.layout.storage_unit_item, parent, false);
 
         // Add the view to the storage unit list
         StorageUnitViewHolder vh = new StorageUnitViewHolder(v);
@@ -77,12 +70,12 @@ public class StorageUnitAdapter extends RecyclerView.Adapter<StorageUnitAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull StorageUnitViewHolder holder, final int position) {
-        holder.name.setText(_storageUnits.get(position).get_name()); // Set the storage unit nam
-        holder.image.setImageResource(_storageUnits.get(position).get_iconId());
+        holder.name.setText(_items.get(position).get_name()); // Set the storage unit nam
+        //holder.image.setImageResource(_storageUnits.get(position).get_iconId());
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                _storageUnits.remove(position); // Remove this item
+                _items.remove(position); // Remove this item
                 notifyDataSetChanged(); // Tell the adapter to update
             }
         });
@@ -96,6 +89,6 @@ public class StorageUnitAdapter extends RecyclerView.Adapter<StorageUnitAdapter.
 
     @Override
     public int getItemCount() {
-        return _storageUnits.size();
+        return _items.size();
     }
 }
