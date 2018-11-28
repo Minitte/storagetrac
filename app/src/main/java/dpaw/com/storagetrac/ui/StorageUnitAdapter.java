@@ -65,7 +65,8 @@ public class StorageUnitAdapter extends RecyclerView.Adapter<StorageUnitAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull StorageUnitViewHolder holder, final int position) {
-        holder.name.setText(_storageUnits.get(position).get_name()); // Set the storage unit name
+        holder.name.setText(_storageUnits.get(position).get_name()); // Set the storage unit nam
+        holder.image.setImageResource(_storageUnits.get(position).get_iconId());
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

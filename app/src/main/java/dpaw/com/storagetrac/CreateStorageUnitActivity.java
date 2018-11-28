@@ -3,11 +3,7 @@ package dpaw.com.storagetrac;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Parcel;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -15,6 +11,7 @@ import android.widget.Toast;
 
 import dpaw.com.storagetrac.data.StorageUnit;
 import dpaw.com.storagetrac.ui.StorageUnitDialogFragment;
+import dpaw.com.storagetrac.util.DrawableHelper;
 
 /**
  * Activity that handles the creation of new storage units.
@@ -37,7 +34,7 @@ public class CreateStorageUnitActivity extends AppCompatActivity implements Stor
         setContentView(R.layout.activity_create_storage_unit);
 
         _storageIcon = findViewById(R.id.storageUnitIcon);
-        _storageName= findViewById(R.id.storageUnitName);
+        _storageName = findViewById(R.id.storageUnitName);
 
         initButtons();
     }
@@ -53,7 +50,8 @@ public class CreateStorageUnitActivity extends AppCompatActivity implements Stor
                 // Validation
                 if (_storageName.getText().length() > 0 && _storageIcon.getDrawable() != null) {
                     // Create a new storage unit
-                    StorageUnit newUnit = new StorageUnit(_storageName.getText().toString());
+                    int drawableId = getApplicationContext().getResources().getIdentifier(_storageIcon.getTag().toString(), "drawable", getApplicationContext().getPackageName());
+                    StorageUnit newUnit = new StorageUnit(_storageName.getText().toString(), drawableId);
 
                     // Pack the new storage unit into an intent
                     Bundle bundle = new Bundle();
@@ -89,7 +87,8 @@ public class CreateStorageUnitActivity extends AppCompatActivity implements Stor
     }
 
     @Override
-    public void selectImage(Drawable image) {
+    public void selectImage(Drawable image, Object tag) {
         _storageIcon.setImageDrawable(image);
+        _storageIcon.setTag(tag);
     }
 }

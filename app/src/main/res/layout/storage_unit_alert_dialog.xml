@@ -23,6 +23,7 @@
                 android:layout_height="100dp"
                 android:layout_weight="1"
                 android:scaleType="fitCenter"
+                android:tag="ic_home"
                 app:srcCompat="@drawable/ic_home" />
 
             <ImageButton
@@ -31,6 +32,7 @@
                 android:layout_height="100dp"
                 android:layout_weight="1"
                 android:scaleType="fitXY"
+                android:tag="ic_garage"
                 app:srcCompat="@drawable/ic_garage"
                 tools:layout_editor_absoluteX="96dp" />
 
@@ -40,6 +42,7 @@
                 android:layout_height="100dp"
                 android:layout_weight="1"
                 android:scaleType="fitXY"
+                android:tag="ic_fridge"
                 app:srcCompat="@drawable/ic_fridge"
                 tools:layout_editor_absoluteX="48dp" />
         </TableRow>

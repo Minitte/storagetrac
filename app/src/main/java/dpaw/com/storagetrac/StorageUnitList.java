@@ -1,8 +1,6 @@
 package dpaw.com.storagetrac;
 
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,7 +13,7 @@ import java.util.ArrayList;
 
 import dpaw.com.storagetrac.data.StorageUnit;
 import dpaw.com.storagetrac.ui.StorageUnitAdapter;
-import dpaw.com.storagetrac.ui.StorageUnitDialogFragment;
+import dpaw.com.storagetrac.util.DrawableHelper;
 
 public class StorageUnitList extends AppCompatActivity {
 
@@ -41,8 +39,8 @@ public class StorageUnitList extends AppCompatActivity {
         _storageUnits = new ArrayList<>();
 
         // For testing purposes
-        for (int i = 0; i < 20; i++) {
-            _storageUnits.add(new StorageUnit("Storage Unit " + i));
+        for (int i = 1; i < 6; i++) {
+            _storageUnits.add(new StorageUnit("Storage Unit " + i, R.drawable.ic_fridge));
         }
 
         // Initialize the view
@@ -107,10 +105,10 @@ public class StorageUnitList extends AppCompatActivity {
 
         // Toggle visibilities and images
         if (editing) {
-            editButton.setImageDrawable(GetDrawable(getApplicationContext(), "ic_check_black_24dp"));
+            editButton.setImageDrawable(getDrawable(R.drawable.ic_check_black_24dp));
             createNewButton.setVisibility(View.VISIBLE);
         } else {
-            editButton.setImageDrawable(GetDrawable(getApplicationContext(), "ic_edit_black_24dp"));
+            editButton.setImageDrawable(getDrawable(R.drawable.ic_edit_black_24dp));
             createNewButton.setVisibility(View.INVISIBLE);
         }
     }
@@ -146,14 +144,6 @@ public class StorageUnitList extends AppCompatActivity {
         }
     }
 
-    /**
-     * Returns a drawable by name.
-     * @param c context of the application
-     * @param ImageName the name of the drawable
-     * @return the drawable object if found
-     */
-    public static Drawable GetDrawable(Context c, String ImageName) {
-        return c.getResources().getDrawable(c.getResources().getIdentifier(ImageName, "drawable", c.getPackageName()));
-    }
+
 
 }

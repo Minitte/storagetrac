@@ -60,7 +60,7 @@ public class StorageUnitDialogFragment extends DialogFragment {
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    _listener.selectImage(((ImageButton)button).getDrawable()); // Select this image
+                    _listener.selectImage(((ImageButton)button).getDrawable(), button.getTag().toString()); // Select this image
                     dismiss(); // Close the dialog window
                 }
             });
@@ -76,6 +76,6 @@ public class StorageUnitDialogFragment extends DialogFragment {
          * Called when the user selects an image in the dialog window.
          * @param image the image selected
          */
-        void selectImage(Drawable image);
+        void selectImage(Drawable image, Object tag);
     }
 }

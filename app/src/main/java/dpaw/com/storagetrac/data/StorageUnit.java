@@ -21,6 +21,11 @@ public class StorageUnit implements Serializable {
     private String _name;
 
     /**
+     * Icon of the storage unit.
+     */
+    private int _iconId;
+
+    /**
      * List of items in this storage unit
      */
     private List<Item> _items;
@@ -30,8 +35,9 @@ public class StorageUnit implements Serializable {
      * Automaticly sets up the list
      * @param name name of the storage unit
      */
-    public StorageUnit(String name) {
+    public StorageUnit(String name, int iconId) {
         this._name = name;
+        this._iconId = iconId;
 
         _items = new ArrayList<>();
 
@@ -172,11 +178,27 @@ public class StorageUnit implements Serializable {
     }
 
     /**
+     * Gets the value of _icon.
+     * @return the value of _icon as a int
+     */
+    public int get_iconId() {
+        return _iconId;
+    }
+
+    /**
      * Sets the _name
      *
      * @param _name set _name to this value
      */
     public void set_name(String _name) {
         this._name = _name;
+    }
+
+    /**
+     * Sets the iconId.
+     * @param iconId set _icon to this value
+      */
+    public void set_icon(int iconId) {
+        this._iconId = iconId;
     }
 }
