@@ -10,13 +10,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import dpaw.com.storagetrac.data.StorageUnit;
+import dpaw.com.storagetrac.ui.StorageUnitDialogListener;
 import dpaw.com.storagetrac.ui.StorageUnitDialogFragment;
-import dpaw.com.storagetrac.util.DrawableHelper;
 
 /**
  * Activity that handles the creation of new storage units.
  */
-public class CreateStorageUnitActivity extends AppCompatActivity implements StorageUnitDialogFragment.StorageDialogListener {
+public class CreateStorageUnit extends AppCompatActivity implements StorageUnitDialogListener {
 
     /**
      * The name of the storage unit to create.

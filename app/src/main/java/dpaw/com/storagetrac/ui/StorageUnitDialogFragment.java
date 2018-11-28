@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,12 +22,12 @@ public class StorageUnitDialogFragment extends DialogFragment {
     /**
      * Listener that handles communication between this dialog and the activity.
      */
-    private StorageDialogListener _listener;
+    private StorageUnitDialogListener _listener;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        _listener = (StorageDialogListener)context;
+        _listener = (StorageUnitDialogListener)context;
     }
 
     @Override
@@ -65,17 +64,5 @@ public class StorageUnitDialogFragment extends DialogFragment {
                 }
             });
         }
-    }
-
-    /**
-     * Interface for storage dialog listeners.
-     * Handles communication between dialog and activity.
-     */
-    public interface StorageDialogListener {
-        /**
-         * Called when the user selects an image in the dialog window.
-         * @param image the image selected
-         */
-        void selectImage(Drawable image, Object tag);
     }
 }

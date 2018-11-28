@@ -13,7 +13,6 @@ import java.util.ArrayList;
 
 import dpaw.com.storagetrac.data.StorageUnit;
 import dpaw.com.storagetrac.ui.StorageUnitAdapter;
-import dpaw.com.storagetrac.util.DrawableHelper;
 
 public class StorageUnitList extends AppCompatActivity {
 
@@ -117,7 +116,7 @@ public class StorageUnitList extends AppCompatActivity {
      * Starts the create storage unit activity.
      */
     private void createNewStorageUnit() {
-        Intent intent = new Intent(this, CreateStorageUnitActivity.class);
+        Intent intent = new Intent(this, CreateStorageUnit.class);
         startActivityForResult(intent, 1);
     }
 

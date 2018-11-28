@@ -20,8 +20,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".CreateStorageUnitActivity"
+            android:name=".CreateStorageUnit"
             android:label="@string/title_activity_create_storage_unit"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".StorageUnit"
+            android:label="@string/title_activity_storage_unit"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
