@@ -4,14 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.LoginActivity">
+    tools:context=".activity.RegisterAcitivity">
 
     <TextView
         android:id="@+id/activityHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="@string/title_activity_login"
+        android:text="@string/title_activity_register"
+        android:textAlignment="center"
         android:textSize="36sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -68,6 +69,31 @@
         app:layout_constraintTop_toBottomOf="@+id/emailField" />
 
     <TextView
+        android:id="@+id/passwordError2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="85dp"
+        android:layout_marginEnd="173dp"
+        android:text="@string/error_password_repeat"
+        android:textColor="@color/colorError"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/passwordField2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/passwordField2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:ems="10"
+        android:hint="@string/prompt_password_repeat"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/passwordField" />
+
+    <TextView
         android:id="@+id/loginError"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -84,10 +110,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:onClick="loginWithFieldValues"
-        android:text="@string/action_sign_in"
+        android:onClick="registerWithFieldValues"
+        android:text="@string/action_register"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwordField" />
+        app:layout_constraintTop_toBottomOf="@+id/passwordField2" />
 
 </android.support.constraint.ConstraintLayout>

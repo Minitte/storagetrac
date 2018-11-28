@@ -73,7 +73,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
 
         // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = _auth.getCurrentUser();
+        //FirebaseUser currentUser = _auth.getCurrentUser();
     }
 
     /**
@@ -100,32 +100,6 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         loginAccount(email, pass);
-    }
-
-    /**
-     * Attempts to create a new account
-     * @param email the email associated with the account
-     * @param password the password associated with the account
-     */
-    private void createAccount(String email, String password) {
-        _auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    if (task.isSuccessful()) {
-                        // Sign in success, update UI with the signed-in user's information
-                        Log.d(TAG, "createUserWithEmail:success");
-                        FirebaseUser user = _auth.getCurrentUser();
-                        Toast.makeText(LoginActivity.this, "New account successfully created!.",
-                                Toast.LENGTH_SHORT).show();
-                    } else {
-                        // If sign in fails, display a message to the user.
-                        Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                        Toast.makeText(LoginActivity.this, "Failed to create an account.",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }
-        );
     }
 
     /**
