@@ -18,6 +18,14 @@
     <string name="title_activity_storage_unit">StorageUnitActivity</string>
 
     <string name="warning">Warning</string>
-    <string name="title_activity_create_item">CreateItem</string>
+
+
+
+    <!-- Item related -->
+    <string name="item_name">Item name:</string>
+    <string name="item_icon">Item icon:</string>
+    <string name="quantity">Quantity:</string>
+    <string name="unit">Unit:</string>
+    <string name="expiry_date">Expiry date:</string>
 
 </resources>
