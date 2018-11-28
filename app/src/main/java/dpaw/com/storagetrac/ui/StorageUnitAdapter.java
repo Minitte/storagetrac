@@ -30,10 +30,10 @@ public class StorageUnitAdapter extends RecyclerView.Adapter<StorageUnitAdapter.
     public static class StorageUnitViewHolder extends RecyclerView.ViewHolder {
         // List of data that's contained in each storage unit
         public ImageView image;
+        public ImageView warning;
         public TextView name;
         public TextView quantity;
-        public ImageView warning;
-        public ImageButton deleteButton;
+        public TextView expiry;
 
         /**
          * Constructor for creating a new list item view.
@@ -45,7 +45,7 @@ public class StorageUnitAdapter extends RecyclerView.Adapter<StorageUnitAdapter.
             name = itemView.findViewById(R.id.itemName);
             quantity = itemView.findViewById(R.id.itemQuantity);
             warning = itemView.findViewById(R.id.warning);
-            deleteButton = itemView.findViewById(R.id.deleteButton);
+            expiry = itemView.findViewById(R.id.itemExpiry);
         }
     }
 
@@ -76,20 +76,6 @@ public class StorageUnitAdapter extends RecyclerView.Adapter<StorageUnitAdapter.
         holder.name.setText(item.get_name());
         holder.image.setImageResource(item.get_iconId());
         holder.quantity.setText(item.get_quantity() + " " + item.get_unit());
-
-        holder.deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                _items.remove(position); // Remove this item
-                notifyDataSetChanged(); // Tell the adapter to update
-            }
-        });
-
-        if (StorageUnitList.editing) {
-            holder.deleteButton.setVisibility(View.VISIBLE);
-        } else {
-            holder.deleteButton.setVisibility(View.INVISIBLE);
-        }
     }
 
     @Override

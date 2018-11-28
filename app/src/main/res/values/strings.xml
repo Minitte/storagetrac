@@ -18,5 +18,6 @@
     <string name="title_activity_storage_unit">StorageUnitActivity</string>
 
     <string name="warning">Warning</string>
+    <string name="title_activity_create_item">CreateItem</string>
 
 </resources>

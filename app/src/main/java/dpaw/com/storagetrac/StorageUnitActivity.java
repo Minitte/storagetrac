@@ -16,12 +16,10 @@ import dpaw.com.storagetrac.data.StorageUnit;
 import dpaw.com.storagetrac.ui.StorageUnitAdapter;
 import dpaw.com.storagetrac.ui.StorageUnitListAdapter;
 
+/**
+ * Activity for displaying items inside a storage unit.
+ */
 public class StorageUnitActivity extends AppCompatActivity {
-
-    /**
-     * Flag for edit state.
-     */
-    public static boolean editing;
 
     /**
      * The currently opened storage unit.
@@ -43,17 +41,11 @@ public class StorageUnitActivity extends AppCompatActivity {
         _storageUnit = (StorageUnit)intent.getSerializableExtra("unit");
 
         // For testing purposes
-        _storageUnit.add(new Item("Spaghetti", R.drawable.ic_launcher_foreground, 3, QuantityUnit.GRAMS));
-        _storageUnit.add(new Item("Apple", R.drawable.ic_launcher_foreground, 3, QuantityUnit.UNIT));
-        _storageUnit.add(new Item("Juice", R.drawable.ic_launcher_foreground, 1000, QuantityUnit.MILLILITRES));
-        _storageUnit.add(new Item("a", R.drawable.ic_launcher_foreground, 3, QuantityUnit.GRAMS));
-        _storageUnit.add(new Item("b", R.drawable.ic_launcher_foreground, 3, QuantityUnit.GRAMS));
-        _storageUnit.add(new Item("c", R.drawable.ic_launcher_foreground, 3, QuantityUnit.GRAMS));
-        _storageUnit.add(new Item("d", R.drawable.ic_launcher_foreground, 3, QuantityUnit.GRAMS));
-        _storageUnit.add(new Item("e", R.drawable.ic_launcher_foreground, 3, QuantityUnit.GRAMS));
-        _storageUnit.add(new Item("f", R.drawable.ic_launcher_foreground, 3, QuantityUnit.GRAMS));
-        _storageUnit.add(new Item("g", R.drawable.ic_launcher_foreground, 3, QuantityUnit.GRAMS));
-        _storageUnit.add(new Item("h", R.drawable.ic_launcher_foreground, 3, QuantityUnit.GRAMS));
+        _storageUnit.add(new Item("Apple", R.drawable.ic_apple, 3, QuantityUnit.UNIT));
+        _storageUnit.add(new Item("Orange", R.drawable.ic_orange, 5, QuantityUnit.UNIT));
+        _storageUnit.add(new Item("Tomato", R.drawable.ic_tomato, 10, QuantityUnit.UNIT));
+        _storageUnit.add(new Item("Cabbage", R.drawable.ic_cabbage, 100, QuantityUnit.GRAMS));
+        _storageUnit.add(new Item("Milk", R.drawable.ic_milk, 1, QuantityUnit.LITRES));
 
         initRecyclerView();
     }

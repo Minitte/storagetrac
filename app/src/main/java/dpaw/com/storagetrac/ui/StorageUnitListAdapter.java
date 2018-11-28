@@ -28,7 +28,7 @@ public class StorageUnitListAdapter extends RecyclerView.Adapter<StorageUnitList
     /**
      * Listener for the storage unit adapter.
      */
-    private static StorageUnitListAdapterListener _storageUnitListAdapterListener;
+    private static StorageUnitListListener _storageUnitListListener;
 
     public static class StorageUnitListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         // List of data that's contained in each storage unit
@@ -50,7 +50,7 @@ public class StorageUnitListAdapter extends RecyclerView.Adapter<StorageUnitList
 
         @Override
         public void onClick(View v) {
-            _storageUnitListAdapterListener.selectStorageUnit(this.getAdapterPosition());
+            _storageUnitListListener.selectStorageUnit(this.getAdapterPosition());
         }
     }
 
@@ -58,9 +58,9 @@ public class StorageUnitListAdapter extends RecyclerView.Adapter<StorageUnitList
      * Constructor.
      * @param storageUnits the list of storage units
      */
-    public StorageUnitListAdapter(ArrayList<StorageUnit> storageUnits, StorageUnitListAdapterListener adapterListener) {
+    public StorageUnitListAdapter(ArrayList<StorageUnit> storageUnits, StorageUnitListListener adapterListener) {
         _storageUnits = storageUnits;
-        _storageUnitListAdapterListener = adapterListener;
+        _storageUnitListListener = adapterListener;
     }
 
     @NonNull

@@ -13,9 +13,12 @@ import java.util.ArrayList;
 
 import dpaw.com.storagetrac.data.StorageUnit;
 import dpaw.com.storagetrac.ui.StorageUnitListAdapter;
-import dpaw.com.storagetrac.ui.StorageUnitListAdapterListener;
+import dpaw.com.storagetrac.ui.StorageUnitListListener;
 
-public class StorageUnitList extends AppCompatActivity implements StorageUnitListAdapterListener {
+/**
+ * Activity for displaying a list of storage units.
+ */
+public class StorageUnitList extends AppCompatActivity implements StorageUnitListListener {
 
     /**
      * Flag for edit state.
