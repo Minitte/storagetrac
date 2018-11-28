@@ -9,6 +9,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import dpaw.com.storagetrac.R;
@@ -53,7 +54,7 @@ public class StorageUnitAdapter extends RecyclerView.Adapter<StorageUnitAdapter.
      * @param storageUnit reference to the storage unit
      */
     public StorageUnitAdapter(StorageUnit storageUnit) {
-        _items = new ArrayList<>();
+        _items = (ArrayList<Item>)storageUnit.get_items();
     }
 
     @NonNull
@@ -70,8 +71,12 @@ public class StorageUnitAdapter extends RecyclerView.Adapter<StorageUnitAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull StorageUnitViewHolder holder, final int position) {
-        holder.name.setText(_items.get(position).get_name()); // Set the storage unit nam
-        //holder.image.setImageResource(_storageUnits.get(position).get_iconId());
+        // Set item properties
+        Item item = _items.get(position);
+        holder.name.setText(item.get_name());
+        holder.image.setImageResource(item.get_iconId());
+        holder.quantity.setText(item.get_quantity() + " " + item.get_unit());
+
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
