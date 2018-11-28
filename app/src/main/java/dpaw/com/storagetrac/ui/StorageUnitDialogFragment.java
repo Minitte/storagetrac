@@ -37,7 +37,7 @@ public class StorageUnitDialogFragment extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
         // Initialize the view
-        View view = inflater.inflate(R.layout.storage_unit_alert_dialog, null);
+        View view = inflater.inflate(R.layout.item_alert_dialog, null);
         builder.setView(view);
         initButtons(view);
 

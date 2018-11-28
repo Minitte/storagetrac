@@ -158,7 +158,4 @@ public class StorageUnitList extends AppCompatActivity implements StorageUnitLis
             }
         }
     }
-
-
-
 }

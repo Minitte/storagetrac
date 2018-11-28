@@ -9,6 +9,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageButton;
+import android.widget.Toast;
+
+import java.util.Calendar;
+import java.util.Date;
 
 import dpaw.com.storagetrac.data.Item;
 import dpaw.com.storagetrac.data.QuantityUnit;
@@ -40,14 +45,19 @@ public class StorageUnitActivity extends AppCompatActivity {
         Intent intent = getIntent();
         _storageUnit = (StorageUnit)intent.getSerializableExtra("unit");
 
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_MONTH, 1);
+        Date date = calendar.getTime();
+
         // For testing purposes
-        _storageUnit.add(new Item("Apple", R.drawable.ic_apple, 3, QuantityUnit.UNIT));
-        _storageUnit.add(new Item("Orange", R.drawable.ic_orange, 5, QuantityUnit.UNIT));
-        _storageUnit.add(new Item("Tomato", R.drawable.ic_tomato, 10, QuantityUnit.UNIT));
-        _storageUnit.add(new Item("Cabbage", R.drawable.ic_cabbage, 100, QuantityUnit.GRAMS));
-        _storageUnit.add(new Item("Milk", R.drawable.ic_milk, 1, QuantityUnit.LITRES));
+        _storageUnit.add(new Item("Apple", R.drawable.ic_apple, 3, QuantityUnit.UNIT, date));
+        _storageUnit.add(new Item("Orange", R.drawable.ic_orange, 5, QuantityUnit.UNIT, date));
+        _storageUnit.add(new Item("Tomato", R.drawable.ic_tomato, 10, QuantityUnit.UNIT, date));
+        _storageUnit.add(new Item("Cabbage", R.drawable.ic_cabbage, 100, QuantityUnit.GRAMS, date));
+        _storageUnit.add(new Item("Milk", R.drawable.ic_milk, 1, QuantityUnit.LITRES, date));
 
         initRecyclerView();
+        initButtons();
     }
 
     /**
@@ -59,6 +69,50 @@ public class StorageUnitActivity extends AppCompatActivity {
         _storageUnitAdapter = new StorageUnitAdapter(_storageUnit);
         recyclerView.setAdapter(_storageUnitAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    /**
+     * Adds on click listeners to the buttons.
+     */
+    private void initButtons() {
+        ImageButton createItem = findViewById(R.id.itemCreate);
+        createItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createNewItem();
+            }
+        });
+    }
+
+    /**
+     * Starts the create new item activity.
+     */
+    private void createNewItem() {
+        Intent intent = new Intent(this, CreateItem.class);
+        startActivityForResult(intent, 1);
+    }
+
+    /**
+     * Adds a new item to the storage unit.
+     * @param item the item to add
+     */
+    private void addItemToStorage(Item item) {
+        _storageUnit.add(item);
+        _storageUnitAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * Currently used to get data back from other activities.
+     */
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if(resultCode == RESULT_OK) {
+                // Add the new item
+                Item newItem = (Item)data.getSerializableExtra("item");
+                addItemToStorage(newItem);
+            }
+        }
     }
 
 }

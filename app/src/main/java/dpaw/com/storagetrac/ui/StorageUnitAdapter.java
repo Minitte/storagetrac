@@ -10,7 +10,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.lang.reflect.Array;
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import dpaw.com.storagetrac.R;
 import dpaw.com.storagetrac.StorageUnitList;
@@ -71,11 +75,32 @@ public class StorageUnitAdapter extends RecyclerView.Adapter<StorageUnitAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull StorageUnitViewHolder holder, final int position) {
-        // Set item properties
+        // Set item display properties
         Item item = _items.get(position);
         holder.name.setText(item.get_name());
         holder.image.setImageResource(item.get_iconId());
         holder.quantity.setText(item.get_quantity() + " " + item.get_unit());
+
+        // Setting the expiration date text if it exists
+        if (item.get_expiryDate() != null) {
+            // Create calendar object for both dates
+            Calendar current = Calendar.getInstance();
+            Calendar expiry = Calendar.getInstance();
+            expiry.setTime(item.get_expiryDate());
+
+            // Compare time difference
+            long msDiff = expiry.getTimeInMillis() - current.getTimeInMillis();
+            long daysDiff = TimeUnit.MILLISECONDS.toDays(msDiff);
+
+            // Display hours if under a day left
+            if (daysDiff < 1) {
+                long hoursDiff = TimeUnit.MILLISECONDS.toHours(msDiff);
+                holder.expiry.setText("Expires in " + hoursDiff + " hours");
+                holder.warning.setVisibility(View.VISIBLE); // Show warning
+            } else {
+                holder.expiry.setText("Expires in " + daysDiff + " days");
+            }
+        }
     }
 
     @Override

@@ -18,6 +18,15 @@
             android:layout_weight="1">
 
             <ImageButton
+                android:id="@+id/milk"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:layout_weight="1"
+                android:scaleType="fitCenter"
+                android:tag="ic_milk"
+                app:srcCompat="@drawable/ic_milk" />
+
+            <ImageButton
                 android:id="@+id/apple"
                 android:layout_width="match_parent"
                 android:layout_height="64dp"
@@ -64,15 +73,6 @@
             android:layout_weight="1">
 
             <ImageButton
-                android:id="@+id/milk"
-                android:layout_width="match_parent"
-                android:layout_height="64dp"
-                android:layout_weight="1"
-                android:scaleType="fitCenter"
-                android:tag="ic_apple"
-                app:srcCompat="@drawable/ic_milk" />
-
-            <ImageButton
                 android:id="@+id/orange"
                 android:layout_width="match_parent"
                 android:layout_height="64dp"
@@ -94,6 +94,28 @@
 
             <ImageButton
                 android:id="@+id/empty"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:layout_weight="1"
+                android:scaleType="fitXY"
+                android:tag="ic_tomato"
+                android:visibility="invisible"
+                app:srcCompat="@drawable/ic_tomato"
+                tools:layout_editor_absoluteX="48dp" />
+
+            <ImageButton
+                android:id="@+id/empty2"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:layout_weight="1"
+                android:scaleType="fitXY"
+                android:tag="ic_tomato"
+                android:visibility="invisible"
+                app:srcCompat="@drawable/ic_tomato"
+                tools:layout_editor_absoluteX="48dp" />
+
+            <ImageButton
+                android:id="@+id/empty3"
                 android:layout_width="match_parent"
                 android:layout_height="64dp"
                 android:layout_weight="1"

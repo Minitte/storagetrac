@@ -87,7 +87,7 @@ public class Item implements Serializable {
         this._unit = unit;
         this._expiryDate = expiryDate;
 
-        //_id = (name + _expiryDate.toString()).hashCode();
+        _id = (name + _expiryDate.toString()).hashCode();
     }
 
     /**

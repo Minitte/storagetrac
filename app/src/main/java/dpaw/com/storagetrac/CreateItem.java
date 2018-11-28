@@ -23,7 +23,9 @@ import dpaw.com.storagetrac.data.Item;
 import dpaw.com.storagetrac.data.QuantityUnit;
 import dpaw.com.storagetrac.data.StorageUnit;
 import dpaw.com.storagetrac.ui.DatePickerFragment;
+import dpaw.com.storagetrac.ui.ItemDialogFragment;
 import dpaw.com.storagetrac.ui.ItemDialogListener;
+import dpaw.com.storagetrac.ui.StorageUnitDialogFragment;
 
 public class CreateItem extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, ItemDialogListener {
 
@@ -105,6 +107,14 @@ public class CreateItem extends AppCompatActivity implements DatePickerDialog.On
                 datePicker.show(getFragmentManager(), "Date Picker");
             }
         });
+
+        pickIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ItemDialogFragment icons = new ItemDialogFragment();
+                icons.show(getFragmentManager(), "Choose an icon");
+            }
+        });
     }
 
     /**
@@ -135,7 +145,7 @@ public class CreateItem extends AppCompatActivity implements DatePickerDialog.On
 
     @Override
     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-        // Update calendar instance
+        // Create new calendar instance
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.YEAR, year);
         calendar.set(Calendar.MONTH, month);

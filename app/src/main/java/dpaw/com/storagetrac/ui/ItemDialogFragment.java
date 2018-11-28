@@ -37,7 +37,7 @@ public class ItemDialogFragment extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
         // Initialize the view
-        View view = inflater.inflate(R.layout.storage_unit_alert_dialog, null); //TODO
+        View view = inflater.inflate(R.layout.item_alert_dialog, null); //TODO
         builder.setView(view);
         initButtons(view);
 
