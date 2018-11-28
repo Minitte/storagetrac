@@ -25,7 +25,12 @@ public class StorageUnitAdapter extends RecyclerView.Adapter<StorageUnitAdapter.
      */
     private ArrayList<StorageUnit> _storageUnits;
 
-    public static class StorageUnitViewHolder extends RecyclerView.ViewHolder {
+    /**
+     * Listener for the storage unit adapter.
+     */
+    private static StorageUnitAdapterListener _storageUnitAdapterListener;
+
+    public static class StorageUnitViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         // List of data that's contained in each storage unit
         public ImageView image;
         public TextView name;
@@ -40,6 +45,12 @@ public class StorageUnitAdapter extends RecyclerView.Adapter<StorageUnitAdapter.
             image = itemView.findViewById(R.id.storageUnitImage);
             name = itemView.findViewById(R.id.storageUnitName);
             deleteButton = itemView.findViewById(R.id.deleteButton);
+            itemView.setOnClickListener(this); // Set the on click listener
+        }
+
+        @Override
+        public void onClick(View v) {
+            _storageUnitAdapterListener.selectStorageUnit(this.getAdapterPosition());
         }
     }
 
@@ -47,8 +58,9 @@ public class StorageUnitAdapter extends RecyclerView.Adapter<StorageUnitAdapter.
      * Constructor.
      * @param storageUnits the list of storage units
      */
-    public StorageUnitAdapter(ArrayList<StorageUnit> storageUnits) {
+    public StorageUnitAdapter(ArrayList<StorageUnit> storageUnits, StorageUnitAdapterListener adapterListener) {
         _storageUnits = storageUnits;
+        _storageUnitAdapterListener = adapterListener;
     }
 
     @NonNull

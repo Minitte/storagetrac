@@ -24,7 +24,7 @@
             android:label="@string/title_activity_create_storage_unit"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".StorageUnit"
+            android:name=".StorageUnitActivity"
             android:label="@string/title_activity_storage_unit"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>

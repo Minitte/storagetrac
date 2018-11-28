@@ -13,8 +13,9 @@ import java.util.ArrayList;
 
 import dpaw.com.storagetrac.data.StorageUnit;
 import dpaw.com.storagetrac.ui.StorageUnitAdapter;
+import dpaw.com.storagetrac.ui.StorageUnitAdapterListener;
 
-public class StorageUnitList extends AppCompatActivity {
+public class StorageUnitList extends AppCompatActivity implements StorageUnitAdapterListener {
 
     /**
      * Flag for edit state.
@@ -53,7 +54,7 @@ public class StorageUnitList extends AppCompatActivity {
      */
     private void initRecyclerView() {
         RecyclerView recyclerView = findViewById(R.id.storageView);
-        _storageUnitAdapter = new StorageUnitAdapter(_storageUnits);
+        _storageUnitAdapter = new StorageUnitAdapter(_storageUnits, this);
         recyclerView.setAdapter(_storageUnitAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -127,6 +128,12 @@ public class StorageUnitList extends AppCompatActivity {
     private void addStorageUnit(StorageUnit storageUnit) {
         _storageUnits.add(storageUnit);
         _storageUnitAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void selectStorageUnit(int index) {
+        Intent intent = new Intent(this, StorageUnitActivity.class);
+        startActivity(intent);
     }
 
     /**

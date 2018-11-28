@@ -15,5 +15,6 @@
 
     <string name="done">Done</string>
     <string name="cancel">Cancel</string>
+    <string name="title_activity_storage_unit">StorageUnitActivity</string>
 
 </resources>
