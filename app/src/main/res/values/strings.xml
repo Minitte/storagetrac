@@ -19,9 +19,8 @@
 
     <string name="warning">Warning</string>
 
-
-
     <!-- Item related -->
+    <string name="title_activity_create_item">CreateItemActivity</string>
     <string name="item_name">Item name:</string>
     <string name="item_icon">Item icon:</string>
     <string name="quantity">Quantity:</string>

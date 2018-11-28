@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TableLayout
+        android:id="@+id/table"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <ImageButton
+                android:id="@+id/apple"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:layout_weight="1"
+                android:scaleType="fitCenter"
+                android:tag="ic_apple"
+                app:srcCompat="@drawable/ic_apple" />
+
+            <ImageButton
+                android:id="@+id/banana"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:layout_weight="1"
+                android:scaleType="fitXY"
+                android:tag="ic_banana"
+                app:srcCompat="@drawable/ic_banana"
+                tools:layout_editor_absoluteX="96dp" />
+
+            <ImageButton
+                android:id="@+id/broccoli"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:layout_weight="1"
+                android:scaleType="fitXY"
+                android:tag="ic_broccoli"
+                app:srcCompat="@drawable/ic_broccoli"
+                tools:layout_editor_absoluteX="48dp" />
+
+            <ImageButton
+                android:id="@+id/cabbage"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:layout_weight="1"
+                android:scaleType="fitXY"
+                android:tag="ic_cabbage"
+                app:srcCompat="@drawable/ic_cabbage"
+                tools:layout_editor_absoluteX="48dp" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <ImageButton
+                android:id="@+id/milk"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:layout_weight="1"
+                android:scaleType="fitCenter"
+                android:tag="ic_apple"
+                app:srcCompat="@drawable/ic_milk" />
+
+            <ImageButton
+                android:id="@+id/orange"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:layout_weight="1"
+                android:scaleType="fitXY"
+                android:tag="ic_banana"
+                app:srcCompat="@drawable/ic_orange"
+                tools:layout_editor_absoluteX="96dp" />
+
+            <ImageButton
+                android:id="@+id/tomato"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:layout_weight="1"
+                android:scaleType="fitXY"
+                android:tag="ic_tomato"
+                app:srcCompat="@drawable/ic_tomato"
+                tools:layout_editor_absoluteX="48dp" />
+
+            <ImageButton
+                android:id="@+id/empty"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:layout_weight="1"
+                android:scaleType="fitXY"
+                android:tag="ic_tomato"
+                android:visibility="invisible"
+                app:srcCompat="@drawable/ic_tomato"
+                tools:layout_editor_absoluteX="48dp" />
+
+        </TableRow>
+
+    </TableLayout>
+
+</android.support.constraint.ConstraintLayout>
