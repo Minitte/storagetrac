@@ -208,13 +208,13 @@ public class StorageUnitList extends AppCompatActivity implements StorageUnitLis
      * Adds onClick listeners to the buttons.
      */
     private void initButtons() {
-        ImageButton optionsButton = findViewById(R.id.options);
-        optionsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Doesn't do anything yet", Toast.LENGTH_SHORT).show();
-            }
-        });
+//        ImageButton optionsButton = findViewById(R.id.options);
+//        optionsButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(getApplicationContext(), "Doesn't do anything yet", Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
         ImageButton editButton = findViewById(R.id.storageEdit);
         editButton.setOnClickListener(new View.OnClickListener() {
