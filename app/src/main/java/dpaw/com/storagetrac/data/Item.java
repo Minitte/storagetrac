@@ -9,9 +9,9 @@ import java.util.Date;
 public class Item implements Serializable {
 
     /**
-     * id of the item
+     * ID from Firestone
      */
-    private int _id;
+    private String _fireStoneID;
 
     /**
      * Name of the item
@@ -43,8 +43,6 @@ public class Item implements Serializable {
         this._name = name;
         this._quantity = quantity;
         this._unit = QuantityUnit.UNIT;
-
-        _id = (name + _expiryDate.toString()).hashCode();
     }
 
     /**
@@ -57,8 +55,6 @@ public class Item implements Serializable {
         this._name = name;
         this._quantity = quantity;
         this._unit = unit;
-
-        _id = (name + _expiryDate.toString()).hashCode();
     }
 
     /**
@@ -74,8 +70,6 @@ public class Item implements Serializable {
         this._quantity = quantity;
         this._unit = unit;
         this._expiryDate = expiryDate;
-
-        _id = (name + _expiryDate.toString()).hashCode();
     }
 
     /**
@@ -109,16 +103,36 @@ public class Item implements Serializable {
 
         Item i = (Item)obj;
 
-        return _id == i._id;
+        if (i._expiryDate != null || _expiryDate != null) {
+
+            if (_expiryDate == null || i._expiryDate == null) {
+                return false;
+            }
+
+            return _name == i._name && _unit == i._unit && _expiryDate == i._expiryDate;
+
+        } else {
+            // compare name and unit
+            return _name == i._name && _unit == i._unit;
+        }
     }
 
     /**
-     * Gets the value of _id
+     * Gets the value of _fireStoneID
      *
-     * @return a int
+     * @return a java.lang.String
      */
-    public int get_id() {
-        return _id;
+    public String get_fireStoneID() {
+        return _fireStoneID;
+    }
+
+    /**
+     * Sets the _fireStoneID
+     *
+     * @param _fireStoneID set _fireStoneID to this value
+     */
+    public void set_fireStoneID(String _fireStoneID) {
+        this._fireStoneID = _fireStoneID;
     }
 
     /**
