@@ -78,10 +78,23 @@ public class StorageUnitDatabase implements Serializable {
     }
 
     /**
+     * Removes all remote storages
+     */
+    public void clearRemoteStorages() {
+        for (int i = _storageUnits.size() - 1; i <= 0; i--) {
+            if (_storageUnits.get(i).get_fireStoneID() != null) {
+                _storageUnits.remove(i);
+            }
+        }
+    }
+
+    /**
      * Gets the value of _storageUnits.
      * @return the value of _storageUnits as a list of StorageUnit
      */
     public List<StorageUnit> get_storageUnits() {
         return _storageUnits;
     }
+
+
 }

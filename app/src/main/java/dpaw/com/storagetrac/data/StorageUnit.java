@@ -36,6 +36,11 @@ public class StorageUnit implements Serializable {
     private List<Item> _items;
 
     /**
+     * List of emails that have share access
+     */
+    private List<String> _sharedEmails;
+
+    /**
      * COnstructor of a storage unit.
      * Automaticly sets up the list
      * @param name name of the storage unit
@@ -48,6 +53,8 @@ public class StorageUnit implements Serializable {
 
         String hashString = Calendar.getInstance().getTime().toString() + name;
         _id = hashString.hashCode();
+
+        _sharedEmails = new ArrayList<>();
     }
 
     /**
@@ -209,14 +216,6 @@ public class StorageUnit implements Serializable {
     }
 
     /**
-     * Gets the list of items.
-     * @return the list of items
-     */
-    public List<Item> get_items() {
-        return _items;
-    }
-
-    /**
      * Sets the _name
      *
      * @param _name set _name to this value
@@ -234,11 +233,20 @@ public class StorageUnit implements Serializable {
         return _items;
     }
   
-   /**
+    /**
      * Sets the iconId.
      * @param iconId set _icon to this value
      */
     public void set_icon(int iconId) {
         this._iconId = iconId;
+    }
+
+    /**
+     * Gets the value of _sharedEmails
+     *
+     * @return a java.util.List<java.lang.String>
+     */
+    public List<String> get_sharedEmails() {
+        return _sharedEmails;
     }
 }

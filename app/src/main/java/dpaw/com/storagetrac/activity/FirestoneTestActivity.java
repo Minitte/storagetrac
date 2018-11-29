@@ -1,7 +1,17 @@
 package dpaw.com.storagetrac.activity;
 
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import dpaw.com.storagetrac.R;
 import dpaw.com.storagetrac.data.Item;
@@ -16,19 +26,36 @@ public class FirestoneTestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_firestone_test);
 
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+
+        auth.signInWithEmailAndPassword("test1@hello.com", "ozma123")
+            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if (task.isSuccessful()) {
+                        Log.i("Blah", "Successfully Logged in");
+                        fireStoreTest();
+                    } else {
+                        Log.e("Blah", "Failed to login!");
+                    }
+                }
+            });
+
+    }
+
+    private void fireStoreTest() {
+
         FirestoneDatabaseAccess db = new FirestoneDatabaseAccess();
 
-        StorageUnit su = new StorageUnit("Ozma storage test");
+        StorageUnit su = new StorageUnit("Ozma storage test", 0);
 
-        Item carrotItem = new Item("Carrot", 30, QuantityUnit.KILOGRAMS);
-        Item waterItem = new Item("Water", 100, QuantityUnit.LITRES);
-        Item carrotItem2 = new Item("Carrot", 5, QuantityUnit.KILOGRAMS);
-        Item carrotJuice = new Item("Carrot", 10000, QuantityUnit.LITRES);
+        Item carrotItem = new Item("Carrot",0, 999, QuantityUnit.KILOGRAMS);
+        Item waterItem = new Item("Water", 0, 100, QuantityUnit.LITRES);
+        Item potatoItem = new Item("Potato", 0, 30, QuantityUnit.KILOGRAMS);
 
         su.add(carrotItem);
         su.add(waterItem);
-        su.add(carrotItem2);
-        su.add(carrotJuice);
+        su.add(potatoItem);
 
         db.addStorageUnit(su);
     }
