@@ -74,6 +74,8 @@ public class ShareListActivity extends AppCompatActivity {
             }
         }
 
+        adapter.notifyDataSetChanged();
+
         // clear text
         emailField.setText("");
     }
