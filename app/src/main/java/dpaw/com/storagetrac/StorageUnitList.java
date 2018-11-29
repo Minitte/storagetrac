@@ -136,6 +136,8 @@ public class StorageUnitList extends AppCompatActivity implements StorageUnitLis
                                 _storageUnitDatabase.add(remoteSU);
 
                                 saveLocalDatabase();
+
+                                _storageUnitListAdapter.notifyDataSetChanged();
                             }
                         });
                         Log.i("SU_Sync_start", "Updated a storage unit with remote storage unit");
