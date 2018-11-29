@@ -17,7 +17,10 @@ import dpaw.com.storagetrac.R;
 import dpaw.com.storagetrac.data.Item;
 import dpaw.com.storagetrac.data.QuantityUnit;
 import dpaw.com.storagetrac.data.StorageUnit;
+import dpaw.com.storagetrac.data.UserFireStoreData;
 import dpaw.com.storagetrac.database.Firestone.FirestoneDatabaseAccess;
+import dpaw.com.storagetrac.database.Firestone.IOnGetRemoteStorageUnitHandler;
+import dpaw.com.storagetrac.database.Firestone.IOnGetRemoteUserDataHandler;
 
 public class FirestoneTestActivity extends AppCompatActivity {
 
@@ -57,6 +60,20 @@ public class FirestoneTestActivity extends AppCompatActivity {
         su.add(waterItem);
         su.add(potatoItem);
 
-        db.addStorageUnit(su);
+//        db.addStorageUnit(su);
+
+        db.getRemoteStorageUnit("VUhqeDM9700YBVD0c4TO", new IOnGetRemoteStorageUnitHandler() {
+            @Override
+            public void OnGetRemoteStorageUnit(StorageUnit su) {
+
+            }
+        });
+
+//        db.getRemoteUserData("test1@hello.com", new IOnGetRemoteUserDataHandler() {
+//            @Override
+//            public void onGetRemoteUserData(UserFireStoreData data) {
+//
+//            }
+//        });
     }
 }

@@ -12,13 +12,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import org.w3c.dom.Document;
-
-import java.util.HashMap;
-import java.util.List;
 
 import dpaw.com.storagetrac.data.Item;
 import dpaw.com.storagetrac.data.StorageUnit;
@@ -288,6 +281,27 @@ public class FirestoneDatabaseAccess {
     }
 
     /**
+     * Fetches UserFireStoreData from firestore
+     * @param email the targeted email
+     * @param handler the result handler
+     */
+    public void getRemoteUserData(String email, final IOnGetRemoteUserDataHandler handler) {
+        DocumentReference userDoc = db.collection(USER_COLLETION_NAME).document(email);
+
+        userDoc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isComplete() && task.getResult().exists()) {
+                    UserFireStoreData userData = task.getResult().toObject(UserFireStoreData.class);
+                    handler.onGetRemoteUserData(userData);
+                } else {
+                    handler.onGetRemoteUserData(null);
+                }
+            }
+        });
+    }
+
+    /**
      * Gets a remote storage unit from the firestore db server
      * @param storageUnitID
      * @param handler
@@ -303,6 +317,7 @@ public class FirestoneDatabaseAccess {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful() && task.getResult().exists()) {
+                    Log.i("LUL", task.getResult().toString());
                     StorageUnit su = task.getResult().toObject(StorageUnit.class);
                     handler.OnGetRemoteStorageUnit(su);
                 } else {

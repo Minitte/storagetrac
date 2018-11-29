@@ -41,6 +41,12 @@ public class StorageUnit implements Serializable {
     private List<String> _sharedEmails;
 
     /**
+     * Blank/empty constructor for firestore
+     */
+    public StorageUnit() {
+    }
+
+    /**
      * COnstructor of a storage unit.
      * Automaticly sets up the list
      * @param name name of the storage unit

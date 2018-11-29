@@ -36,6 +36,10 @@ public class ShareListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_share_list);
 
+        emailField = findViewById(R.id.emailField);
+
+//        storageUnit = (StorageUnit)savedInstanceState.getSerializable("storage unit");
+        storageUnit = (StorageUnit)getIntent().getSerializableExtra("storage unit");
         initRecyclerView();
     }
 
@@ -65,6 +69,10 @@ public class ShareListActivity extends AppCompatActivity {
 
         // database object
         FirestoneDatabaseAccess db = new FirestoneDatabaseAccess();
+
+        if (storageUnit.get_sharedEmails().size() + emails.length > 0) {
+            db.addStorageUnit(storageUnit);
+        }
 
         // add all non existing emails
         for (int i = 0; i < emails.length; i++) {

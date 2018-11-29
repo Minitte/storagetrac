@@ -11,6 +11,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import dpaw.com.storagetrac.activity.LoginActivity;
+import dpaw.com.storagetrac.activity.ShareListActivity;
 import dpaw.com.storagetrac.data.StorageUnit;
 import dpaw.com.storagetrac.database.LocalStorageDatabaseReader;
 import dpaw.com.storagetrac.database.LocalStorageDatabaseWriter;
@@ -192,5 +194,18 @@ public class StorageUnitList extends AppCompatActivity implements StorageUnitLis
                 saveLocalDatabase();
             }
         }
+    }
+
+    @Override
+    public void onRequireLogin() {
+        Intent i = new Intent(this, LoginActivity.class);
+        startActivity(i);
+    }
+
+    @Override
+    public void onOpenShareList(int index) {
+        Intent i = new Intent(this, ShareListActivity.class);
+        i.putExtra("storage unit", _storageUnitDatabase.get_storageUnits().get(index));
+        startActivity(i);
     }
 }

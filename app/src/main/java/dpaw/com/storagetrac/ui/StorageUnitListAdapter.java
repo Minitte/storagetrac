@@ -1,5 +1,6 @@
 package dpaw.com.storagetrac.ui;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 
 import dpaw.com.storagetrac.R;
 import dpaw.com.storagetrac.StorageUnitList;
+import dpaw.com.storagetrac.activity.LoginActivity;
 import dpaw.com.storagetrac.data.StorageUnit;
 
 /**
@@ -99,11 +101,11 @@ public class StorageUnitListAdapter extends RecyclerView.Adapter<StorageUnitList
                 FirebaseAuth auth = FirebaseAuth.getInstance();
 
                 if (auth.getCurrentUser() == null) {
-                    // TODO go to login / register
+                    _storageUnitListListener.onRequireLogin();
                     return;
                 }
 
-                // TODO open email list
+                _storageUnitListListener.onOpenShareList(position);
             }
         });
 
@@ -121,3 +123,4 @@ public class StorageUnitListAdapter extends RecyclerView.Adapter<StorageUnitList
         return _storageUnits.size();
     }
 }
+
