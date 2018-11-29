@@ -93,6 +93,14 @@ public class StorageUnitDatabase implements Serializable {
         return remote;
     }
 
+    public void cleanNulls() {
+        for (int i = _storageUnits.size() - 1; i >= 0; i--) {
+            if (_storageUnits.get(i) == null) {
+                _storageUnits.remove(i);
+            }
+        }
+    }
+
     /**
      * Gets the value of _storageUnits.
      * @return the value of _storageUnits as a list of StorageUnit

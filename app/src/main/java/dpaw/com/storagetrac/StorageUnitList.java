@@ -294,6 +294,7 @@ public class StorageUnitList extends AppCompatActivity implements StorageUnitLis
 
     public void refresh(View view) {
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            _storageUnitDatabase.cleanNulls();
             checkRemoteStorages();
             getMissingRemoteStorageUnits();
         } else {
