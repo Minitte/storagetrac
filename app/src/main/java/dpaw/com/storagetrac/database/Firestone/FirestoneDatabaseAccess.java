@@ -37,9 +37,12 @@ public class FirestoneDatabaseAccess {
 
     /**
      * Add a new storage unit in the firestone database
-     * @param su
+     * @param su storage unit to add to the database
      */
-    public void addStorageUnit(StorageUnit su) {
+    public void addStorageUnit(final StorageUnit su) {
+        if (su.get_fireStoneID() != null) {
+            return;
+        }
 
         HashMap data = new HashMap<String, String>();
 
@@ -54,12 +57,14 @@ public class FirestoneDatabaseAccess {
             @Override
             public void onComplete(@NonNull Task task) {
                 doc.update("_fireStoneID", doc.getId());
+
+                su.set_fireStoneID(doc.getId());
+
+                for (Item item : su.get_items()) {
+                    addItem(su, item);
+                }
             }
         });
-
-        for (Item item : su.get_items()) {
-            addItem(su, item);
-        }
     }
 
     /**
