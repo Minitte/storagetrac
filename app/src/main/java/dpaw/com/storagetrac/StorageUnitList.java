@@ -109,6 +109,8 @@ public class StorageUnitList extends AppCompatActivity implements StorageUnitLis
                     return;
                 }
 
+                final UserFireStoreData userData = data;
+
                 for (final StorageUnit su : remote) {
                     // no access to this storage unit now
                     if (!data.get_ownedStorage().contains(su.get_fireStoneID()) && !data.get_borrowedStorage().contains(su.get_fireStoneID())) {
@@ -121,6 +123,10 @@ public class StorageUnitList extends AppCompatActivity implements StorageUnitLis
                                 // deleted by owner
                                 if (su == null) {
                                     _storageUnitDatabase.remove(su);
+
+                                    userData.get_borrowedStorage().remove(su.get_fireStoneID());
+                                    userData.get_ownedStorage().remove(su.get_fireStoneID());
+
                                     return;
                                 }
 

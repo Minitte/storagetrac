@@ -18,6 +18,7 @@ import dpaw.com.storagetrac.R;
 import dpaw.com.storagetrac.StorageUnitList;
 import dpaw.com.storagetrac.activity.LoginActivity;
 import dpaw.com.storagetrac.data.StorageUnit;
+import dpaw.com.storagetrac.database.Firestone.FirestoneDatabaseAccess;
 
 /**
  * Class for providing adapter functionality to the storage unit recycler view.
@@ -89,9 +90,14 @@ public class StorageUnitListAdapter extends RecyclerView.Adapter<StorageUnitList
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                StorageUnit su = _storageUnits.get(position);
                 _storageUnits.remove(position); // Remove this item
                 notifyDataSetChanged(); // Tell the adapter to update
                 StorageUnitList.saveLocalDatabase(); // Save database
+
+                if (su.get_fireStoneID() != null) {
+                    new FirestoneDatabaseAccess().deleteStorage(su);
+                }
             }
         });
 
