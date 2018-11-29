@@ -11,9 +11,14 @@ import java.util.List;
 public class StorageUnit implements Serializable {
 
     /**
-     * id of the storage unit
+     * ID for the storage unit
      */
     private int _id;
+
+    /**
+     * firestone id of the storage unit
+     */
+    private String _fireStoneID;
 
     /**
      * Name of the storage unit
@@ -77,10 +82,10 @@ public class StorageUnit implements Serializable {
 
     /**
      * Attempts to remove the item from the list
-     * @param id id of the item to remove
+     * @param id firestone id of the item to remove
      * @return if the item removal was successful
      */
-    public boolean remove(int id) {
+    public boolean remove(String id) {
         Item match = findItemByID(id);
 
         if (match != null) {
@@ -110,14 +115,14 @@ public class StorageUnit implements Serializable {
 
     /**
      * Searches the list of a matching item by id
-     * @param id id of the storage unit to remove
+     * @param id firestone id of the storage unit to remove
      * @return returns the first item that matches or a null if none found
      */
-    public Item findItemByID(int id) {
+    public Item findItemByID(String id) {
         // search for item
         for (Item cur : _items) {
             // compare by name and expiry
-            if (cur.get_id() == id) {
+            if (cur.get_fireStoneID() == id) {
                 return cur;
             }
         }
@@ -169,6 +174,24 @@ public class StorageUnit implements Serializable {
     }
 
     /**
+     * Gets the value of _fireStoneID
+     *
+     * @return a java.lang.String
+     */
+    public String get_fireStoneID() {
+        return _fireStoneID;
+    }
+
+    /**
+     * Sets the _fireStoneID
+     *
+     * @param _fireStoneID set _fireStoneID to this value
+     */
+    public void set_fireStoneID(String _fireStoneID) {
+        this._fireStoneID = _fireStoneID;
+    }
+
+    /**
      * Gets the value of _name
      *
      * @return a java.lang.String
@@ -203,9 +226,18 @@ public class StorageUnit implements Serializable {
     }
 
     /**
+     * Gets the value of _items
+     *
+     * @return a java.util.List<dpaw.com.storagetrac.data.Item>
+     */
+    public List<Item> get_items() {
+        return _items;
+    }
+  
+   /**
      * Sets the iconId.
      * @param iconId set _icon to this value
-      */
+     */
     public void set_icon(int iconId) {
         this._iconId = iconId;
     }
