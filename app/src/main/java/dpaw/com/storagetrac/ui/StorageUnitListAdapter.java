@@ -46,7 +46,7 @@ public class StorageUnitListAdapter extends RecyclerView.Adapter<StorageUnitList
         public StorageUnitListViewHolder(View itemView) {
             super(itemView);
             image = itemView.findViewById(R.id.storageUnitImage);
-            name = itemView.findViewById(R.id.storageUnitName);
+            name = itemView.findViewById(R.id.emailText);
             deleteButton = itemView.findViewById(R.id.deleteButton);
             shareButton = itemView.findViewById(R.id.shareButton);
             itemView.setOnClickListener(this); // Set the on click listener

@@ -34,7 +34,7 @@ public class CreateStorageUnit extends AppCompatActivity implements StorageUnitD
         setContentView(R.layout.activity_create_storage_unit);
 
         _storageIcon = findViewById(R.id.storageUnitIcon);
-        _storageName = findViewById(R.id.storageUnitName);
+        _storageName = findViewById(R.id.emailText);
 
         initButtons();
     }
