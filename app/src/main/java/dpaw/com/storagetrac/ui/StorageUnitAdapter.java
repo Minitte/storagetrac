@@ -31,8 +31,14 @@ public class StorageUnitAdapter extends RecyclerView.Adapter<StorageUnitAdapter.
      */
     private ArrayList<Item> _items;
 
+    /**
+     * Listener that handles communication between the list components and the activity.
+     */
     private static StorageUnitListener _storageUnitListener;
 
+    /**
+     * Holds the display information of each list item in the recycler view.
+     */
     public static class StorageUnitViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         // List of data that's contained in each storage unit
         public ImageView image;
@@ -108,7 +114,7 @@ public class StorageUnitAdapter extends RecyclerView.Adapter<StorageUnitAdapter.
                 holder.warning.setVisibility(View.VISIBLE); // Show warning
             } else {
                 holder.expiry.setText("Expires in " + daysDiff + " day(s)");
-                holder.warning.setVisibility(View.VISIBLE); // Hide warning
+                holder.warning.setVisibility(View.INVISIBLE); // Hide warning
             }
         }
     }

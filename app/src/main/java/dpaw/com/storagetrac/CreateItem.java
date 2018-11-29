@@ -54,7 +54,7 @@ public class CreateItem extends AppCompatActivity implements DatePickerDialog.On
         Item item = (Item)intent.getSerializableExtra("item");
         _index = intent.getIntExtra("index", -1);
 
-        // Item not being null means this is an edit
+        // Item not being null means the user is editing
         if (item != null) {
             _item = item;
             updateViews();

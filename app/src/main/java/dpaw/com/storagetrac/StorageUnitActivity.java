@@ -18,6 +18,9 @@ import java.util.Date;
 import dpaw.com.storagetrac.data.Item;
 import dpaw.com.storagetrac.data.QuantityUnit;
 import dpaw.com.storagetrac.data.StorageUnit;
+import dpaw.com.storagetrac.database.LocalStorageDatabaseReader;
+import dpaw.com.storagetrac.database.LocalStorageDatabaseWriter;
+import dpaw.com.storagetrac.database.StorageUnitDatabase;
 import dpaw.com.storagetrac.ui.StorageUnitAdapter;
 import dpaw.com.storagetrac.ui.StorageUnitListAdapter;
 import dpaw.com.storagetrac.ui.StorageUnitListener;
@@ -37,25 +40,30 @@ public class StorageUnitActivity extends AppCompatActivity implements StorageUni
      */
     private StorageUnitAdapter _storageUnitAdapter;
 
+    /**
+     * The local storage unit database.
+     */
+    private StorageUnitDatabase _storageUnitDatabase;
+
+    /**
+     * Path of the database.
+     */
+    private String _databasePath;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_storage_unit);
+        _databasePath = getApplicationInfo().dataDir + "/" + StorageUnitList.DATABASE_NAME;
 
-        // Retrieve storage unit from the intent
+        // Get reference to local database
+        LocalStorageDatabaseReader databaseReader = new LocalStorageDatabaseReader(_databasePath);
+        _storageUnitDatabase = databaseReader.Read();
+
+        // Retrieve storage unit index from the intent
         Intent intent = getIntent();
-        _storageUnit = (StorageUnit)intent.getSerializableExtra("unit");
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DAY_OF_MONTH, 1);
-        Date date = calendar.getTime();
-
-        // For testing purposes
-        _storageUnit.add(new Item("Apple", R.drawable.ic_apple, 3, QuantityUnit.UNIT, date));
-        _storageUnit.add(new Item("Orange", R.drawable.ic_orange, 5, QuantityUnit.UNIT, date));
-        _storageUnit.add(new Item("Tomato", R.drawable.ic_tomato, 10, QuantityUnit.UNIT, date));
-        _storageUnit.add(new Item("Cabbage", R.drawable.ic_cabbage, 100, QuantityUnit.GRAMS, date));
-        _storageUnit.add(new Item("Milk", R.drawable.ic_milk, 1, QuantityUnit.LITRES, date));
+        int storageIndex = intent.getIntExtra("index", -1);
+        _storageUnit = _storageUnitDatabase.get_storageUnits().get(storageIndex); // Get storage unit from database
 
         initRecyclerView();
         initButtons();
@@ -86,6 +94,14 @@ public class StorageUnitActivity extends AppCompatActivity implements StorageUni
     }
 
     /**
+     * Saves the local database.
+     */
+    private void saveLocalDatabase() {
+        LocalStorageDatabaseWriter databaseWriter = new LocalStorageDatabaseWriter(_databasePath);
+        databaseWriter.write(_storageUnitDatabase);
+    }
+
+    /**
      * Starts the create new item activity.
      */
     private void createNewItem() {
@@ -100,6 +116,7 @@ public class StorageUnitActivity extends AppCompatActivity implements StorageUni
     private void addItemToStorage(Item item) {
         _storageUnit.add(item);
         _storageUnitAdapter.notifyDataSetChanged();
+        saveLocalDatabase();
     }
 
     /**
@@ -113,6 +130,7 @@ public class StorageUnitActivity extends AppCompatActivity implements StorageUni
                 // Add the new item
                 Item newItem = (Item)data.getSerializableExtra("item");
                 addItemToStorage(newItem);
+                saveLocalDatabase();
             }
         }
 
@@ -123,13 +141,10 @@ public class StorageUnitActivity extends AppCompatActivity implements StorageUni
                 Item newItem = (Item)data.getSerializableExtra("item");
                 int index = data.getIntExtra("index", -1);
 
-                // Replace item if index is valid
-                if (index != -1) {
-                    _storageUnit.get_items().set(index, newItem);
-                    _storageUnitAdapter.notifyDataSetChanged();
-                } else {
-                    Toast.makeText(getApplicationContext(), "Something went wrong.", Toast.LENGTH_SHORT).show();
-                }
+                // Replace item at specified index
+                _storageUnit.get_items().set(index, newItem);
+                _storageUnitAdapter.notifyDataSetChanged();
+                saveLocalDatabase();
             }
         }
     }

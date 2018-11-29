@@ -77,5 +77,11 @@ public class StorageUnitDatabase implements Serializable {
         return true;
     }
 
-
+    /**
+     * Gets the value of _storageUnits.
+     * @return the value of _storageUnits as a list of StorageUnit
+     */
+    public List<StorageUnit> get_storageUnits() {
+        return _storageUnits;
+    }
 }
