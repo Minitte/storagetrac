@@ -2,15 +2,13 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/storageContent"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:id="@+id/storageLayout"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".StorageUnitList"
-    tools:showIn="@layout/activity_storage_unit_list">
+    tools:context=".StorageUnitActivity"
+    tools:showIn="@layout/activity_storage_unit">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/storageView"
+        android:id="@+id/itemView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
@@ -20,14 +18,15 @@
         android:scrollbars="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
 
     </android.support.v7.widget.RecyclerView>
 
     <ImageButton
-        android:id="@+id/storageUnitCreate"
+        android:id="@+id/itemCreate"
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:layout_marginStart="8dp"
@@ -39,7 +38,7 @@
         android:contentDescription="@string/title_activity_create_storage_unit"
         android:scaleType="fitCenter"
         android:tint="@android:color/background_light"
-        android:visibility="invisible"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
