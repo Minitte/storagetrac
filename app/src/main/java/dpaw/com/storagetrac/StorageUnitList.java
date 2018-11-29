@@ -127,6 +127,8 @@ public class StorageUnitList extends AppCompatActivity implements StorageUnitLis
                                     userData.get_borrowedStorage().remove(su.get_fireStoneID());
                                     userData.get_ownedStorage().remove(su.get_fireStoneID());
 
+                                    db.setRemoteUserData(FirebaseAuth.getInstance().getCurrentUser().getEmail(), userData, null);
+
                                     return;
                                 }
 
@@ -177,6 +179,10 @@ public class StorageUnitList extends AppCompatActivity implements StorageUnitLis
                     db.getRemoteStorageUnit(suID, new IStorageUnitResultHandler() {
                         @Override
                         public void onStorageUnitResult(StorageUnit su) {
+                            if (su == null) {
+                                return;
+                            }
+
                             _storageUnitDatabase.add(su);
                             _storageUnitListAdapter.notifyDataSetChanged();
                             saveLocalDatabase();

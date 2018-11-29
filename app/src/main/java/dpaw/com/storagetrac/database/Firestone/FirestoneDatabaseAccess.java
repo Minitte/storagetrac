@@ -96,7 +96,17 @@ public class FirestoneDatabaseAccess {
             return;
         }
 
-        db.collection(STORAGE_UNIT_COLLECTION_NAME).document(target.get_fireStoneID()).delete();
+        db.collection(STORAGE_UNIT_COLLECTION_NAME).document(target.get_fireStoneID()).delete()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Log.i(TAG, "Successfully removed remote storage unit");
+                } else {
+                    Log.i(TAG, "failed to remove remote storage unit");
+                }
+            }
+        });
 
         target.set_fireStoneID(null);
 
