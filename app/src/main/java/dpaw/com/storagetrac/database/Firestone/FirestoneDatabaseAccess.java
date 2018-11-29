@@ -71,6 +71,8 @@ public class FirestoneDatabaseAccess {
                     doc.update("_fireStoneID", doc.getId());
                     su.set_fireStoneID(doc.getId());
 
+                    Log.i("BlAH", "ID set to " + su.get_fireStoneID());
+
                     if (handler != null) {
                         handler.onStorageUnitResult(su);
                     }
@@ -164,52 +166,6 @@ public class FirestoneDatabaseAccess {
                     handler.onStorageUnitResult(su);
                 } else {
                     handler.onStorageUnitResult(null);
-                }
-            }
-        });
-    }
-
-    public void updateLocalDatabase(final StorageUnitDatabase localDB) {
-        if (auth.getCurrentUser() == null) {
-            return;
-        }
-
-        final DocumentReference userDoc = db.collection(USER_COLLETION_NAME).document(auth.getCurrentUser().getEmail());
-
-        userDoc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful() && task.getResult().exists()) {
-                    DocumentSnapshot docSnap = task.getResult();
-
-                    UserFireStoreData userData = docSnap.toObject(UserFireStoreData.class);
-
-                    localDB.clearRemoteStorages();
-
-                    final CollectionReference suCollection = db.collection(STORAGE_UNIT_COLLECTION_NAME);
-
-                    // owned storage
-                    for (String id : userData.get_ownedStorage()) {
-                        suCollection.document(id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                StorageUnit su1 = task.getResult().toObject(StorageUnit.class);
-                                localDB.add(su1);
-                            }
-                        });
-                    }
-
-                    // borrowed storages
-                    for (String id : userData.get_borrowedStorage()) {
-                        suCollection.document(id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                StorageUnit su1 = task.getResult().toObject(StorageUnit.class);
-                                localDB.add(su1);
-                            }
-                        });
-                    }
-
                 }
             }
         });

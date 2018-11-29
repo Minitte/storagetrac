@@ -5,15 +5,23 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.ArrayList;
+import java.util.List;
 
 import dpaw.com.storagetrac.activity.LoginActivity;
 import dpaw.com.storagetrac.activity.ShareListActivity;
 import dpaw.com.storagetrac.data.StorageUnit;
+import dpaw.com.storagetrac.data.UserFireStoreData;
+import dpaw.com.storagetrac.database.Firestone.FirestoneDatabaseAccess;
+import dpaw.com.storagetrac.database.Firestone.IStorageUnitResultHandler;
+import dpaw.com.storagetrac.database.Firestone.IUserDataResultHandler;
 import dpaw.com.storagetrac.database.LocalStorageDatabaseReader;
 import dpaw.com.storagetrac.database.LocalStorageDatabaseWriter;
 import dpaw.com.storagetrac.database.StorageUnitDatabase;
@@ -40,7 +48,7 @@ public class StorageUnitList extends AppCompatActivity implements StorageUnitLis
     /**
      * The local storage unit database.
      */
-    private StorageUnitDatabase _storageUnitDatabase;
+    public static StorageUnitDatabase _storageUnitDatabase;
 
     /**
      * Path of the database.
@@ -65,9 +73,73 @@ public class StorageUnitList extends AppCompatActivity implements StorageUnitLis
             databaseWriter.write(_storageUnitDatabase);
         }
 
+
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            checkRemoteStorages();
+            updateRemoteStorages();
+        }
+
         // Initialize the view
         initRecyclerView();
         initButtons();
+    }
+
+    /**
+     * Checks remote storages for lost of access
+     */
+    private void checkRemoteStorages() {
+        final String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+
+        final List<StorageUnit> remote = _storageUnitDatabase.getAllRemoteStorages();
+
+        Log.i("SU_Sync_start", "checking " + remote.size() + " storage units");
+
+        if (remote.size() == 0) {
+            return;
+        }
+
+        FirestoneDatabaseAccess db = new FirestoneDatabaseAccess();
+
+        db.getRemoteUserData(email, new IUserDataResultHandler() {
+            @Override
+            public void onUserDataResult(UserFireStoreData data) {
+                if (data == null) {
+                    return;
+                }
+
+                for (StorageUnit su : remote) {
+                    // no access to this storage unit now
+                    if (!data.get_ownedStorage().contains(email) && !data.get_borrowedStorage().contains(email)) {
+                        _storageUnitDatabase.remove(su);
+                    }
+                }
+            }
+        });
+    }
+
+    /**
+     * Updates remote storages
+     */
+    private void updateRemoteStorages() {
+        final List<StorageUnit> remote = _storageUnitDatabase.getAllRemoteStorages();
+
+        FirestoneDatabaseAccess db = new FirestoneDatabaseAccess();
+
+        for (final StorageUnit remoteSU : remote) {
+            db.getRemoteStorageUnit(remoteSU.get_fireStoneID(), new IStorageUnitResultHandler() {
+                @Override
+                public void onStorageUnitResult(StorageUnit su) {
+                    // deleted by owner
+                    if (su == null) {
+                        _storageUnitDatabase.remove(remoteSU);
+                        return;
+                    }
+
+                    _storageUnitDatabase.remove(remoteSU);
+                    _storageUnitDatabase.add(su);
+                }
+            });
+        }
     }
 
     /**
@@ -205,7 +277,8 @@ public class StorageUnitList extends AppCompatActivity implements StorageUnitLis
     @Override
     public void onOpenShareList(int index) {
         Intent i = new Intent(this, ShareListActivity.class);
-        i.putExtra("storage unit", _storageUnitDatabase.get_storageUnits().get(index));
+//        i.putExtra("storage unit", _storageUnitDatabase.get_storageUnits().get(index));
+        ShareListActivity.storageUnit = _storageUnitDatabase.get_storageUnits().get(index);
         startActivity(i);
     }
 }

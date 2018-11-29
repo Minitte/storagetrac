@@ -24,7 +24,7 @@ public class ShareListActivity extends AppCompatActivity {
     /**
      * Target storage unit
      */
-    public StorageUnit storageUnit;
+    public static StorageUnit storageUnit;
 
     /**
      * list adapter for shared emails
@@ -44,7 +44,7 @@ public class ShareListActivity extends AppCompatActivity {
         emailField = findViewById(R.id.emailField);
 
 //        storageUnit = (StorageUnit)savedInstanceState.getSerializable("storage unit");
-        storageUnit = (StorageUnit)getIntent().getSerializableExtra("storage unit");
+//        storageUnit = (StorageUnit)getIntent().getSerializableExtra("storage unit");
         initRecyclerView();
     }
 
@@ -118,7 +118,7 @@ public class ShareListActivity extends AppCompatActivity {
 
                                 adapter.notifyDataSetChanged();
 
-                                
+
                             }
                         });
                     }
