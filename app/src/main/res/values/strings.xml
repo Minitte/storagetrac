@@ -1,9 +1,32 @@
 <resources>
+    <!-- Strings related to titles -->
     <string name="app_name">storagetrac</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="title_activity_storage_unit_list">StorageUnitList</string>
+    <string name="title_activity_login">Sign in</string>
+    <string name="title_activity_register">Register</string>
+
+    <!-- Strings related to prompts -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="prompt_password_repeat">Repeat Password</string>
+
+    <!-- Strings related to actions -->
+    <string name="action_sign_in">Sign in</string>
+    <string name="action_register">Register</string>
+
+    <!-- Strings related to errors -->
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+    <string name="error_credentials">Credentials error</string>
+    <string name="error_password_repeat">Does not match!</string>
 
     <string name="options">Options</string>
     <string name="done">Done</string>
@@ -28,5 +51,4 @@
     <string name="warning">Warning</string>
     <string name="expiry_date">Expiry date:</string>
     <string name="title_activity_edit_item">EditItem</string>
-
 </resources>

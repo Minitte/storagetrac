@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "123038763744",
+    "firebase_url": "https://storagetrac.firebaseio.com",
+    "project_id": "storagetrac",
+    "storage_bucket": "storagetrac.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:123038763744:android:7e5a7b6af2559d88",
+        "android_client_info": {
+          "package_name": "dpaw.com.storagetrac"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "123038763744-n1kjigp5h38ck41ci88sat08v9svn27o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "dpaw.com.storagetrac",
+            "certificate_hash": "f07487987ad351064e485d25bef26aea25edee29"
+          }
+        },
+        {
+          "client_id": "123038763744-6rvp5auucjjjv3sf9or32rtdkee9v7v2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "dpaw.com.storagetrac",
+            "certificate_hash": "d4bd223b2c37d33884acbdc4893d511a446ff022"
+          }
+        },
+        {
+          "client_id": "123038763744-47au6n05nlgndb033ldpjpq08m4lqduk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBRYyllNlRrAKq6c3GrH5MM_1IOymgvYLo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "123038763744-47au6n05nlgndb033ldpjpq08m4lqduk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
