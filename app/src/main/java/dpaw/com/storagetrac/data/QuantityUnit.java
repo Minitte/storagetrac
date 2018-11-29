@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public enum QuantityUnit implements Serializable {
 
-    UNIT(""),
+    UNIT("units"),
 
     // WEIGHT
     TON("t"),
