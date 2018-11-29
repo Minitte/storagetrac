@@ -6,8 +6,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 
-import dpaw.com.storagetrac.StorageUnitList;
-
 public class LocalStorageDatabaseWriter {
 
     /**

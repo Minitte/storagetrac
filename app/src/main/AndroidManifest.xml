@@ -38,6 +38,18 @@
                 <category android:name="android.intent.category.INFO" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".CreateStorageUnit"
+            android:label="@string/title_activity_create_storage_unit"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".StorageUnitActivity"
+            android:label="@string/title_activity_storage_unit"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".CreateItem"
+            android:label="@string/title_activity_create_item"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

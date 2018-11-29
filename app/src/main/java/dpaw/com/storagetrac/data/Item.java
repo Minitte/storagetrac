@@ -14,6 +14,11 @@ public class Item implements Serializable {
     private int _id;
 
     /**
+     * Icon of the item.
+     */
+    private int _iconId;
+
+    /**
      * Name of the item
      */
     private String _name;
@@ -34,43 +39,55 @@ public class Item implements Serializable {
     private Date _expiryDate;
 
     /**
+     * Default constructor.
+     */
+    public Item() {}
+
+    /**
      * Constructor for an item object
      * The unit will be set to default unit.
      * @param name name of the item
+     * @param iconId id of the item icon
      * @param quantity qty of the item
      */
-    public Item(String name, double quantity) {
+    public Item(String name, int iconId, double quantity) {
         this._name = name;
+        this._iconId = iconId;
         this._quantity = quantity;
         this._unit = QuantityUnit.UNIT;
 
-        _id = (name + _expiryDate.toString()).hashCode();
+        //_id = (name + _expiryDate.toString()).hashCode();
     }
 
     /**
      * Constructor for an item object
      * @param name name of the item
+     * @param iconId id of the item icon
      * @param quantity qty of the item
      * @param unit the unit of the item
      */
-    public Item(String name, double quantity, QuantityUnit unit) {
+    public Item(String name, int iconId, double quantity, QuantityUnit unit) {
         this._name = name;
+        this._iconId = iconId;
         this._quantity = quantity;
         this._unit = unit;
 
-        _id = (name + _expiryDate.toString()).hashCode();
+        //_id = (name + _expiryDate.toString()).hashCode();
+        _id = name.hashCode();
     }
 
     /**
      /**
      * Constructor for an item object
      * @param name name of the item
+     * @param iconId id of the item icon
      * @param quantity qty of the item
      * @param unit the unit of the item
      * @param expiryDate the expiry date of this item
      */
-    public Item(String name, double quantity, QuantityUnit unit, Date expiryDate) {
+    public Item(String name, int iconId, double quantity, QuantityUnit unit, Date expiryDate) {
         this._name = name;
+        this._iconId = iconId;
         this._quantity = quantity;
         this._unit = unit;
         this._expiryDate = expiryDate;
@@ -191,5 +208,21 @@ public class Item implements Serializable {
      */
     public void set_expiryDate(Date _expiryDate) {
         this._expiryDate = _expiryDate;
+    }
+
+    /**
+     * Gets the value of _iconId
+     * @return the value of _iconId
+     */
+    public int get_iconId() {
+        return _iconId;
+    }
+
+    /**
+     * Sets the _iconId
+     * @param _iconId set _iconId to this value
+     */
+    public void set_iconId(int _iconId) {
+        this._iconId = _iconId;
     }
 }
