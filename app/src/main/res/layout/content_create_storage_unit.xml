@@ -10,7 +10,7 @@
     tools:showIn="@layout/activity_create_storage_unit">
 
     <EditText
-        android:id="@+id/storageUnitName"
+        android:id="@+id/emailText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -42,7 +42,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/storageUnitName"
+        app:layout_constraintTop_toBottomOf="@+id/emailText"
         app:layout_constraintVertical_bias="0.172"
         app:srcCompat="@drawable/custom_border_square" />
 

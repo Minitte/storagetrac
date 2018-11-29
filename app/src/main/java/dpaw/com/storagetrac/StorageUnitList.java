@@ -5,13 +5,23 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import java.util.ArrayList;
+import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import dpaw.com.storagetrac.activity.LoginActivity;
+import dpaw.com.storagetrac.activity.ShareListActivity;
 import dpaw.com.storagetrac.data.StorageUnit;
+import dpaw.com.storagetrac.data.UserFireStoreData;
+import dpaw.com.storagetrac.database.Firestone.FirestoneDatabaseAccess;
+import dpaw.com.storagetrac.database.Firestone.IStorageUnitResultHandler;
+import dpaw.com.storagetrac.database.Firestone.IUserDataResultHandler;
 import dpaw.com.storagetrac.database.LocalStorageDatabaseReader;
 import dpaw.com.storagetrac.database.LocalStorageDatabaseWriter;
 import dpaw.com.storagetrac.database.StorageUnitDatabase;
@@ -38,12 +48,12 @@ public class StorageUnitList extends AppCompatActivity implements StorageUnitLis
     /**
      * The local storage unit database.
      */
-    private StorageUnitDatabase _storageUnitDatabase;
+    public static StorageUnitDatabase _storageUnitDatabase;
 
     /**
      * Path of the database.
      */
-    private String _databasePath;
+    private static String _databasePath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,9 +73,128 @@ public class StorageUnitList extends AppCompatActivity implements StorageUnitLis
             databaseWriter.write(_storageUnitDatabase);
         }
 
+
         // Initialize the view
         initRecyclerView();
         initButtons();
+
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            checkRemoteStorages();
+            getMissingRemoteStorageUnits();
+        } else {
+            Log.i("SU_Sync_start", "Skipping sync because not logged in.");
+        }
+    }
+
+    /**
+     * Checks remote storages for lost of access
+     */
+    private void checkRemoteStorages() {
+        final String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+
+        final List<StorageUnit> remote = _storageUnitDatabase.getAllRemoteStorages();
+
+        Log.i("SU_Sync_start", "checking " + remote.size() + " storage units. ALL:" + _storageUnitDatabase.get_storageUnits().size());
+
+        if (remote.size() == 0) {
+            return;
+        }
+
+        final FirestoneDatabaseAccess db = new FirestoneDatabaseAccess();
+
+        db.getRemoteUserData(email, new IUserDataResultHandler() {
+            @Override
+            public void onUserDataResult(UserFireStoreData data) {
+                if (data == null) {
+                    return;
+                }
+
+                final UserFireStoreData userData = data;
+
+                for (final StorageUnit su : remote) {
+                    // no access to this storage unit now
+                    if (!data.get_ownedStorage().contains(su.get_fireStoneID()) && !data.get_borrowedStorage().contains(su.get_fireStoneID())) {
+                        _storageUnitDatabase.remove(su);
+                        Log.i("SU_Sync_start", "Removed a storage unit (" + su.get_name() + ") because no ownership..");
+                    } else {
+                        db.getRemoteStorageUnit(su.get_fireStoneID(), new IStorageUnitResultHandler() {
+                            @Override
+                            public void onStorageUnitResult(StorageUnit remoteSU) {
+                                // deleted by owner
+                                if (su == null) {
+                                    _storageUnitDatabase.remove(su);
+
+                                    userData.get_borrowedStorage().remove(su.get_fireStoneID());
+                                    userData.get_ownedStorage().remove(su.get_fireStoneID());
+
+                                    db.setRemoteUserData(FirebaseAuth.getInstance().getCurrentUser().getEmail(), userData, null);
+
+                                    return;
+                                }
+
+                                _storageUnitDatabase.remove(su);
+                                _storageUnitDatabase.add(remoteSU);
+
+                                saveLocalDatabase();
+
+                                _storageUnitListAdapter.notifyDataSetChanged();
+                            }
+                        });
+                        Log.i("SU_Sync_start", "Updated a storage unit with remote storage unit");
+                    }
+                }
+            }
+        });
+    }
+
+
+    private void getMissingRemoteStorageUnits() {
+        final String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+
+        final FirestoneDatabaseAccess db = new FirestoneDatabaseAccess();
+
+        db.getRemoteUserData(email, new IUserDataResultHandler() {
+            @Override
+            public void onUserDataResult(UserFireStoreData data) {
+                if (data == null) {
+                    return;
+                }
+
+                List<String> remoteSUID = data.get_borrowedStorage();
+                remoteSUID.addAll(data.get_ownedStorage());
+
+                for (String suID : remoteSUID) {
+                    boolean found = false;
+
+                    for (StorageUnit su : _storageUnitDatabase.get_storageUnits()) {
+                        if (suID.equals(su.get_fireStoneID())) {
+                            found = true;
+                            break;
+                        }
+                    }
+
+                    if (found) {
+                        continue;
+                    }
+
+                    Log.i("Start_Fetch_SU", "Added a remote borrowed Storage Unit.");
+
+                    // storage unit not found
+                    db.getRemoteStorageUnit(suID, new IStorageUnitResultHandler() {
+                        @Override
+                        public void onStorageUnitResult(StorageUnit su) {
+                            if (su == null) {
+                                return;
+                            }
+
+                            _storageUnitDatabase.add(su);
+                            _storageUnitListAdapter.notifyDataSetChanged();
+                            saveLocalDatabase();
+                        }
+                    });
+                }
+            }
+        });
     }
 
     /**
@@ -83,13 +212,13 @@ public class StorageUnitList extends AppCompatActivity implements StorageUnitLis
      * Adds onClick listeners to the buttons.
      */
     private void initButtons() {
-        ImageButton optionsButton = findViewById(R.id.options);
-        optionsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Doesn't do anything yet", Toast.LENGTH_SHORT).show();
-            }
-        });
+//        ImageButton optionsButton = findViewById(R.id.options);
+//        optionsButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(getApplicationContext(), "Doesn't do anything yet", Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
         ImageButton editButton = findViewById(R.id.storageEdit);
         editButton.setOnClickListener(new View.OnClickListener() {
@@ -110,7 +239,6 @@ public class StorageUnitList extends AppCompatActivity implements StorageUnitLis
         // If number of storage units is empty, show add button and hide edit button
         if (_storageUnitDatabase.get_storageUnits().size() == 0) {
             addStorageButton.setVisibility(View.VISIBLE);
-            editButton.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -142,7 +270,7 @@ public class StorageUnitList extends AppCompatActivity implements StorageUnitLis
     /**
      * Saves the local database.
      */
-    private void saveLocalDatabase() {
+    public static void saveLocalDatabase() {
         LocalStorageDatabaseWriter databaseWriter = new LocalStorageDatabaseWriter(_databasePath);
         databaseWriter.write(_storageUnitDatabase);
     }
@@ -162,6 +290,16 @@ public class StorageUnitList extends AppCompatActivity implements StorageUnitLis
     private void addStorageUnit(StorageUnit storageUnit) {
         _storageUnitDatabase.get_storageUnits().add(storageUnit);
         _storageUnitListAdapter.notifyDataSetChanged();
+    }
+
+    public void refresh(View view) {
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            _storageUnitDatabase.cleanNulls();
+            checkRemoteStorages();
+            getMissingRemoteStorageUnits();
+        } else {
+            Log.i("SU_Sync_start", "Skipping sync because not logged in.");
+        }
     }
 
     /**
@@ -192,5 +330,19 @@ public class StorageUnitList extends AppCompatActivity implements StorageUnitLis
                 saveLocalDatabase();
             }
         }
+    }
+
+    @Override
+    public void onRequireLogin() {
+        Intent i = new Intent(this, LoginActivity.class);
+        startActivity(i);
+    }
+
+    @Override
+    public void onOpenShareList(int index) {
+        Intent i = new Intent(this, ShareListActivity.class);
+//        i.putExtra("storage unit", _storageUnitDatabase.get_storageUnits().get(index));
+        ShareListActivity.storageUnit = _storageUnitDatabase.get_storageUnits().get(index);
+        startActivity(i);
     }
 }

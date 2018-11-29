@@ -1,5 +1,6 @@
 package dpaw.com.storagetrac.ui;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,11 +10,15 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.ArrayList;
 
 import dpaw.com.storagetrac.R;
 import dpaw.com.storagetrac.StorageUnitList;
+import dpaw.com.storagetrac.activity.LoginActivity;
 import dpaw.com.storagetrac.data.StorageUnit;
+import dpaw.com.storagetrac.database.Firestone.FirestoneDatabaseAccess;
 
 /**
  * Class for providing adapter functionality to the storage unit recycler view.
@@ -35,6 +40,7 @@ public class StorageUnitListAdapter extends RecyclerView.Adapter<StorageUnitList
         public ImageView image;
         public TextView name;
         public ImageButton deleteButton;
+        public ImageButton shareButton;
 
         /**
          * Constructor for creating a new list item view.
@@ -43,8 +49,9 @@ public class StorageUnitListAdapter extends RecyclerView.Adapter<StorageUnitList
         public StorageUnitListViewHolder(View itemView) {
             super(itemView);
             image = itemView.findViewById(R.id.storageUnitImage);
-            name = itemView.findViewById(R.id.storageUnitName);
+            name = itemView.findViewById(R.id.emailText);
             deleteButton = itemView.findViewById(R.id.deleteButton);
+            shareButton = itemView.findViewById(R.id.shareButton);
             itemView.setOnClickListener(this); // Set the on click listener
         }
 
@@ -79,18 +86,43 @@ public class StorageUnitListAdapter extends RecyclerView.Adapter<StorageUnitList
     public void onBindViewHolder(@NonNull StorageUnitListViewHolder holder, final int position) {
         holder.name.setText(_storageUnits.get(position).get_name()); // Set the storage unit nam
         holder.image.setImageResource(_storageUnits.get(position).get_iconId());
+
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                StorageUnit su = _storageUnits.get(position);
                 _storageUnits.remove(position); // Remove this item
                 notifyDataSetChanged(); // Tell the adapter to update
+                StorageUnitList.saveLocalDatabase(); // Save database
+
+                if (su.get_fireStoneID() != null) {
+                    new FirestoneDatabaseAccess().deleteStorage(su);
+                }
+            }
+        });
+
+        holder.shareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                // check if logged in
+                FirebaseAuth auth = FirebaseAuth.getInstance();
+
+                if (auth.getCurrentUser() == null) {
+                    _storageUnitListListener.onRequireLogin();
+                    return;
+                }
+
+                _storageUnitListListener.onOpenShareList(position);
             }
         });
 
         if (StorageUnitList.editing) {
             holder.deleteButton.setVisibility(View.VISIBLE);
+            holder.shareButton.setVisibility(View.VISIBLE);
         } else {
             holder.deleteButton.setVisibility(View.INVISIBLE);
+            holder.shareButton.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -99,3 +131,4 @@ public class StorageUnitListAdapter extends RecyclerView.Adapter<StorageUnitList
         return _storageUnits.size();
     }
 }
+

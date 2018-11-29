@@ -43,6 +43,8 @@ public class LocalStorageDatabaseReader {
 
             fStream.close();
 
+            Log.i("DatabaseReader", "Successfully read database from local storage");
+
         } catch (IOException ioE) {
             Log.e("DatabaseSaver", ioE.getMessage());
         } catch (ClassNotFoundException cnfE) {

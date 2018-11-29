@@ -12,15 +12,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
-import org.w3c.dom.Document;
-
-import java.util.HashMap;
-import java.util.List;
-
-import dpaw.com.storagetrac.data.Item;
 import dpaw.com.storagetrac.data.StorageUnit;
 import dpaw.com.storagetrac.data.UserFireStoreData;
 import dpaw.com.storagetrac.database.StorageUnitDatabase;
@@ -54,56 +46,42 @@ public class FirestoneDatabaseAccess {
     }
 
     /**
-     * Add a new storage unit in the firestone database
+     * Add/update a storage unit in the firestone database
      * @param su storage unit to add to the database
      */
-    public void addStorageUnit(final StorageUnit su) {
-        if (su.get_fireStoneID() != null) {
-            return;
-        }
-
+    public void setStorageUnit(final StorageUnit su, final IStorageUnitResultHandler handler) {
         if (auth.getCurrentUser() == null) {
             return;
         }
 
-        final DocumentReference doc = db.collection(STORAGE_UNIT_COLLECTION_NAME).document();
+        final DocumentReference doc;
 
-        doc.set(su).addOnCompleteListener(new OnCompleteListener() {
-            @Override
-            public void onComplete(@NonNull Task task) {
-                if (task.isSuccessful()) {
-                    doc.update("_fireStoneID", doc.getId());
-
-                    su.set_fireStoneID(doc.getId());
-
-                    FirebaseUser user = auth.getCurrentUser();
-
-                    addToOwned(su);
-                }
-            }
-        });
-    }
-
-    /**
-     * Updates the entire storage unit entry in the firestone database
-     * @param targetSU target storage unit to update
-     */
-    public void updateStorageUnit(final StorageUnit targetSU) {
-        if (targetSU.get_fireStoneID() == null) {
-            return;
+        if (su.get_fireStoneID() == null) {
+            doc = db.collection(STORAGE_UNIT_COLLECTION_NAME).document();
+        } else {
+            doc = db.collection(STORAGE_UNIT_COLLECTION_NAME).document(su.get_fireStoneID());
         }
 
-        if (auth.getCurrentUser() == null) {
-            return;
-        }
-
-        final DocumentReference doc = db.collection(STORAGE_UNIT_COLLECTION_NAME).document(targetSU.get_fireStoneID());
-
-        doc.set(targetSU).addOnCompleteListener(new OnCompleteListener<Void>() {
+        doc.set(su).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
+
+                    // set id
                     doc.update("_fireStoneID", doc.getId());
+                    su.set_fireStoneID(doc.getId());
+
+                    Log.i("BlAH", "ID set to " + su.get_fireStoneID());
+
+                    if (handler != null) {
+                        handler.onStorageUnitResult(su);
+                    }
+                    Log.i(TAG, "Successfully set remote storage unit");
+                } else {
+                    if (handler != null) {
+                        handler.onStorageUnitResult(null);
+                    }
+                    Log.i(TAG, "Failed to set remote storage unit");
                 }
             }
         });
@@ -118,131 +96,95 @@ public class FirestoneDatabaseAccess {
             return;
         }
 
-        db.collection(STORAGE_UNIT_COLLECTION_NAME).document(target.get_fireStoneID()).delete();
+        db.collection(STORAGE_UNIT_COLLECTION_NAME).document(target.get_fireStoneID()).delete()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Log.i(TAG, "Successfully removed remote storage unit");
+                } else {
+                    Log.i(TAG, "failed to remove remote storage unit");
+                }
+            }
+        });
 
         target.set_fireStoneID(null);
 
-        for (Item i : target.get_items()) {
-            i.set_fireStoneID(null);
-        }
+        target.get_sharedEmails().clear();
     }
 
     /**
-     * Adds su id to user's owned list
-     * @param su storage unit to add to owned list
+     * Fetches UserFireStoreData from firestore
+     * @param email the targeted email
+     * @param handler the result handler
      */
-    public void addToOwned(final StorageUnit su) {
-        if (auth.getCurrentUser() == null) {
-            return;
-        }
-
-        final DocumentReference userDoc = db.collection(USER_COLLETION_NAME).document(auth.getCurrentUser().getEmail());
+    public void getRemoteUserData(String email, final IUserDataResultHandler handler) {
+        DocumentReference userDoc = db.collection(USER_COLLETION_NAME).document(email);
 
         userDoc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    if (task.getResult().exists()) {
-                        DocumentSnapshot docSnap = task.getResult();
-
-                        UserFireStoreData userData = docSnap.toObject(UserFireStoreData.class);
-
-                        Log.i("FireStoreDB", userData.toString());
-
-                        userData.get_ownedStorage().add(su.get_fireStoneID());
-
-                        userDoc.set(userData);
-                    } else {
-                        UserFireStoreData userData = new UserFireStoreData();
-
-                        userData.get_ownedStorage().add(su.get_fireStoneID());
-
-                        userDoc.set(userData);
-                    }
+                if (task.isComplete() && task.getResult().exists()) {
+                    UserFireStoreData userData = task.getResult().toObject(UserFireStoreData.class);
+                    handler.onUserDataResult(userData);
+                    Log.i(TAG, "Successfully obtained user data");
                 } else {
-                    Log.e("FirestoreDB", "Failed to get user data");
+                    handler.onUserDataResult(null);
+                    Log.i(TAG, "failed to obtained user data");
                 }
             }
         });
     }
 
     /**
-     * Adds the storage unit's firestore id to the user's borrowed list
-     * @param email target user's email
-     * @param su the storage unit to add to borrowed list
+     * updates the userdata
+     * @param userData
      */
-    public void addToBorrowed(String email, final StorageUnit su) {
-        if (auth.getCurrentUser() == null) {
-            return;
-        }
+    public void setRemoteUserData(String email, final UserFireStoreData userData, final IUserDataResultHandler handler) {
+        DocumentReference userDoc = db.collection(USER_COLLETION_NAME).document(email);
 
-        final DocumentReference userDoc = db.collection(USER_COLLETION_NAME).document(email);
-
-        userDoc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        userDoc.set(userData).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+            public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    if (task.getResult().exists()) {
-                        DocumentSnapshot docSnap = task.getResult();
-
-                        UserFireStoreData userData = docSnap.toObject(UserFireStoreData.class);
-
-                        userData.get_ownedStorage().add(su.get_fireStoneID());
-
-                        userDoc.set(userData);
-                    } else {
-                        UserFireStoreData userData = new UserFireStoreData();
-
-                        userData.get_borrowedStorage().add(su.get_fireStoneID());
-
-                        userDoc.set(userData);
+                    if (handler != null) {
+                        handler.onUserDataResult(userData);
                     }
+                    Log.i(TAG, "Successfully wrote user data");
+                } else {
+                    if (handler != null) {
+                        handler.onUserDataResult(null);
+                    }
+                    Log.i(TAG, "Failed to write user data");
                 }
             }
         });
     }
 
-    public void updateLocalDatabase(final StorageUnitDatabase localDB) {
+    /**
+     * Gets a remote storage unit from the firestore db server
+     * @param storageUnitID
+     * @param handler
+     */
+    public void getRemoteStorageUnit(String storageUnitID, final IStorageUnitResultHandler handler) {
         if (auth.getCurrentUser() == null) {
             return;
         }
 
-        final DocumentReference userDoc = db.collection(USER_COLLETION_NAME).document(auth.getCurrentUser().getEmail());
+        DocumentReference suDoc = db.collection(STORAGE_UNIT_COLLECTION_NAME).document(storageUnitID);
 
-        userDoc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        suDoc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful() && task.getResult().exists()) {
-                    DocumentSnapshot docSnap = task.getResult();
+                    Log.i("LUL", task.getResult().toString());
+                    StorageUnit su = task.getResult().toObject(StorageUnit.class);
+                    handler.onStorageUnitResult(su);
+                    Log.i(TAG, "Successfully obtained remote storage unit");
+                } else {
+                    handler.onStorageUnitResult(null);
 
-                    UserFireStoreData userData = docSnap.toObject(UserFireStoreData.class);
-
-                    localDB.clearRemoteStorages();
-
-                    final CollectionReference suCollection = db.collection(STORAGE_UNIT_COLLECTION_NAME);
-
-                    // owned storage
-                    for (String id : userData.get_ownedStorage()) {
-                        suCollection.document(id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                StorageUnit su1 = task.getResult().toObject(StorageUnit.class);
-                                localDB.add(su1);
-                            }
-                        });
-                    }
-
-                    // borrowed storages
-                    for (String id : userData.get_borrowedStorage()) {
-                        suCollection.document(id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                StorageUnit su1 = task.getResult().toObject(StorageUnit.class);
-                                localDB.add(su1);
-                            }
-                        });
-                    }
-
+                    Log.i(TAG, "Failed to obtain remote storage unit");
                 }
             }
         });

@@ -18,6 +18,7 @@ import java.util.Date;
 import dpaw.com.storagetrac.data.Item;
 import dpaw.com.storagetrac.data.QuantityUnit;
 import dpaw.com.storagetrac.data.StorageUnit;
+import dpaw.com.storagetrac.database.Firestone.FirestoneDatabaseAccess;
 import dpaw.com.storagetrac.database.LocalStorageDatabaseReader;
 import dpaw.com.storagetrac.database.LocalStorageDatabaseWriter;
 import dpaw.com.storagetrac.database.StorageUnitDatabase;
@@ -131,6 +132,8 @@ public class StorageUnitActivity extends AppCompatActivity implements StorageUni
                 Item newItem = (Item)data.getSerializableExtra("item");
                 addItemToStorage(newItem);
                 saveLocalDatabase();
+
+
             }
         }
 
@@ -145,6 +148,16 @@ public class StorageUnitActivity extends AppCompatActivity implements StorageUni
                 _storageUnit.get_items().set(index, newItem);
                 _storageUnitAdapter.notifyDataSetChanged();
                 saveLocalDatabase();
+            }
+        }
+
+        if (requestCode == 1 || requestCode == 2) {
+            if (_storageUnit.get_fireStoneID() != null) {
+
+                FirestoneDatabaseAccess db = new FirestoneDatabaseAccess();
+
+                db.setStorageUnit(_storageUnit, null);
+
             }
         }
     }

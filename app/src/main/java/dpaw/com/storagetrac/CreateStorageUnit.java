@@ -34,7 +34,7 @@ public class CreateStorageUnit extends AppCompatActivity implements StorageUnitD
         setContentView(R.layout.activity_create_storage_unit);
 
         _storageIcon = findViewById(R.id.storageUnitIcon);
-        _storageName = findViewById(R.id.storageUnitName);
+        _storageName = findViewById(R.id.emailText);
 
         initButtons();
     }
@@ -50,7 +50,11 @@ public class CreateStorageUnit extends AppCompatActivity implements StorageUnitD
                 // Validation
                 if (_storageName.getText().length() > 0 && _storageIcon.getDrawable() != null) {
                     // Create a new storage unit
-                    int drawableId = getApplicationContext().getResources().getIdentifier(_storageIcon.getTag().toString(), "drawable", getApplicationContext().getPackageName());
+                    int drawableId = 0;
+                    if (_storageIcon.getTag() != null) { // Set image id if it exists
+                        drawableId = getApplicationContext().getResources().getIdentifier(_storageIcon.getTag().toString(), "drawable", getApplicationContext().getPackageName());
+                    }
+
                     StorageUnit newUnit = new StorageUnit(_storageName.getText().toString(), drawableId);
 
                     // Pack the new storage unit into an intent

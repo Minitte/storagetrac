@@ -40,6 +40,8 @@ public class LocalStorageDatabaseWriter {
 
             fStream.close();
 
+            Log.i("DatabaseWriter", "Successfully wrote database to local storage");
+
         } catch (IOException ioe) {
             Log.e("DatabaseWriter", ioe.getMessage());
         }

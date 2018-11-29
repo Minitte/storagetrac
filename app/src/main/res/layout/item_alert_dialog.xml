@@ -87,7 +87,7 @@
                 android:layout_height="64dp"
                 android:layout_weight="1"
                 android:scaleType="fitXY"
-                android:tag="ic_banana"
+                android:tag="ic_orange"
                 app:srcCompat="@drawable/ic_orange"
                 tools:layout_editor_absoluteX="96dp" />
 

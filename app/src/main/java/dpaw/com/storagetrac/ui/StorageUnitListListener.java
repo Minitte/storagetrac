@@ -13,4 +13,15 @@ public interface StorageUnitListListener {
      * @param index the selected storage unit's index
      */
     void selectStorageUnit(int index);
+
+    /**
+     * Called when share requires a login
+     */
+    void onRequireLogin();
+
+    /**
+     * Called when share open request
+     * @param index the selected storage unit's index
+     */
+    void onOpenShareList(int index);
 }

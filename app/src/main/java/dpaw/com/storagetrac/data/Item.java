@@ -9,11 +9,6 @@ import java.util.Date;
 public class Item implements Serializable {
 
     /**
-     * ID from Firestone
-     */
-    private String _fireStoneID;
-
-    /**
      * Icon of the item.
      */
     private int _iconId;
@@ -131,24 +126,6 @@ public class Item implements Serializable {
             // compare name and unit
             return _name == i._name && _unit == i._unit;
         }
-    }
-
-    /**
-     * Gets the value of _fireStoneID
-     *
-     * @return a java.lang.String
-     */
-    public String get_fireStoneID() {
-        return _fireStoneID;
-    }
-
-    /**
-     * Sets the _fireStoneID
-     *
-     * @param _fireStoneID set _fireStoneID to this value
-     */
-    public void set_fireStoneID(String _fireStoneID) {
-        this._fireStoneID = _fireStoneID;
     }
 
     /**
