@@ -76,6 +76,7 @@ public class StorageUnitList extends AppCompatActivity implements StorageUnitLis
 
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             checkRemoteStorages();
+            getMissingRemoteStorageUnits();
         } else {
             Log.i("SU_Sync_start", "Skipping sync because not logged in.");
         }
