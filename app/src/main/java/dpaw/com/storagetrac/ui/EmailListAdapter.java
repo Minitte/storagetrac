@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import dpaw.com.storagetrac.R;
+import dpaw.com.storagetrac.StorageUnitList;
 import dpaw.com.storagetrac.data.StorageUnit;
 import dpaw.com.storagetrac.data.UserFireStoreData;
 import dpaw.com.storagetrac.database.Firestone.FirestoneDatabaseAccess;
@@ -58,6 +59,8 @@ public class EmailListAdapter extends RecyclerView.Adapter<EmailHolder> {
                         // remove user from share list
                         storageUnit.removeShared(removedEmail);
                         db.setStorageUnit(storageUnit, null);
+
+                        StorageUnitList.saveLocalDatabase();
 
                         notifyDataSetChanged();
                     }

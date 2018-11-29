@@ -12,6 +12,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.util.List;
 
 import dpaw.com.storagetrac.R;
+import dpaw.com.storagetrac.StorageUnitList;
 import dpaw.com.storagetrac.data.StorageUnit;
 import dpaw.com.storagetrac.data.UserFireStoreData;
 import dpaw.com.storagetrac.database.Firestone.FirestoneDatabaseAccess;
@@ -115,6 +116,8 @@ public class ShareListActivity extends AppCompatActivity {
 
                                 // clear text
                                 emailField.setText("");
+
+                                StorageUnitList.saveLocalDatabase();
 
                                 adapter.notifyDataSetChanged();
 

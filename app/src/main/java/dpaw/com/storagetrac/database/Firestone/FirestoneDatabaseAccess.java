@@ -76,10 +76,12 @@ public class FirestoneDatabaseAccess {
                     if (handler != null) {
                         handler.onStorageUnitResult(su);
                     }
+                    Log.i(TAG, "Successfully set remote storage unit");
                 } else {
                     if (handler != null) {
                         handler.onStorageUnitResult(null);
                     }
+                    Log.i(TAG, "Failed to set remote storage unit");
                 }
             }
         });
@@ -115,8 +117,10 @@ public class FirestoneDatabaseAccess {
                 if (task.isComplete() && task.getResult().exists()) {
                     UserFireStoreData userData = task.getResult().toObject(UserFireStoreData.class);
                     handler.onUserDataResult(userData);
+                    Log.i(TAG, "Successfully obtained user data");
                 } else {
                     handler.onUserDataResult(null);
+                    Log.i(TAG, "failed to obtained user data");
                 }
             }
         });
@@ -136,10 +140,12 @@ public class FirestoneDatabaseAccess {
                     if (handler != null) {
                         handler.onUserDataResult(userData);
                     }
+                    Log.i(TAG, "Successfully wrote user data");
                 } else {
                     if (handler != null) {
                         handler.onUserDataResult(null);
                     }
+                    Log.i(TAG, "Failed to write user data");
                 }
             }
         });
@@ -164,8 +170,11 @@ public class FirestoneDatabaseAccess {
                     Log.i("LUL", task.getResult().toString());
                     StorageUnit su = task.getResult().toObject(StorageUnit.class);
                     handler.onStorageUnitResult(su);
+                    Log.i(TAG, "Successfully obtained remote storage unit");
                 } else {
                     handler.onStorageUnitResult(null);
+
+                    Log.i(TAG, "Failed to obtain remote storage unit");
                 }
             }
         });
