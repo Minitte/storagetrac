@@ -1,5 +1,6 @@
 package dpaw.com.storagetrac.ui;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.AlertDialog;
 import android.app.DialogFragment;
@@ -23,11 +24,11 @@ public class StorageUnitDialogFragment extends DialogFragment {
      * Listener that handles communication between this dialog and the activity.
      */
     private StorageUnitDialogListener _listener;
-
+    
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        _listener = (StorageUnitDialogListener)context;
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        _listener = (StorageUnitDialogListener)activity;
     }
 
     @Override

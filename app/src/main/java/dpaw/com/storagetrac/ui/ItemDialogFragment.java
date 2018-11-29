@@ -1,5 +1,6 @@
 package dpaw.com.storagetrac.ui;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -25,9 +26,9 @@ public class ItemDialogFragment extends DialogFragment {
     private ItemDialogListener _listener;
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        _listener = (ItemDialogListener)context;
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        _listener = (ItemDialogListener)activity;
     }
 
     @Override
