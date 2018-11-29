@@ -20,16 +20,16 @@ public class FirestoneTestActivity extends AppCompatActivity {
 
         StorageUnit su = new StorageUnit("Ozma storage test", 0);
 
-        Item carrotItem = new Item("Carrot",0, 30, QuantityUnit.KILOGRAMS);
+        su.set_fireStoneID("07a8tXtzZpzfQRUIBQjw");
+
+        Item carrotItem = new Item("Carrot",0, 999, QuantityUnit.KILOGRAMS);
         Item waterItem = new Item("Water", 0, 100, QuantityUnit.LITRES);
-        Item carrotItem2 = new Item("Carrot", 0, 5, QuantityUnit.KILOGRAMS);
-        Item carrotJuice = new Item("Carrot", 0, 10000, QuantityUnit.LITRES);
+        Item potatoItem = new Item("Potato", 0, 30, QuantityUnit.KILOGRAMS);
 
         su.add(carrotItem);
         su.add(waterItem);
-        su.add(carrotItem2);
-        su.add(carrotJuice);
+        su.add(potatoItem);
 
-        db.addStorageUnit(su);
+        db.updateStorageUnit(su);
     }
 }

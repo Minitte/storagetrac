@@ -44,25 +44,14 @@ public class FirestoneDatabaseAccess {
             return;
         }
 
-        HashMap data = new HashMap<String, String>();
-
-        data.put("Name", su.get_name());
-        data.put("_id", su.get_id());
-        data.put("_iconId", su.get_iconId());
-        data.put("_fireStoneID", su.get_fireStoneID());
-
         final DocumentReference doc = db.collection(STORAGE_UNIT_COLLECTION_NAME).document();
 
-        doc.set(data).addOnCompleteListener(new OnCompleteListener() {
+        doc.set(su).addOnCompleteListener(new OnCompleteListener() {
             @Override
             public void onComplete(@NonNull Task task) {
                 doc.update("_fireStoneID", doc.getId());
 
                 su.set_fireStoneID(doc.getId());
-
-                for (Item item : su.get_items()) {
-                    addItem(su, item);
-                }
             }
         });
     }
@@ -76,101 +65,14 @@ public class FirestoneDatabaseAccess {
             return;
         }
 
-        db.collection(STORAGE_UNIT_COLLECTION_NAME)
-            .document(targetSU.get_fireStoneID())
-            .delete()
-            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    HashMap data = new HashMap<String, String>();
+        final DocumentReference doc = db.collection(STORAGE_UNIT_COLLECTION_NAME).document(targetSU.get_fireStoneID());
 
-                    data.put("Name", targetSU.get_name());
-                    data.put("_id", targetSU.get_id());
-                    data.put("_iconId", targetSU.get_iconId());
-                    data.put("_fireStoneID", targetSU.get_fireStoneID());
-
-                    final DocumentReference doc = db.collection(STORAGE_UNIT_COLLECTION_NAME).document(targetSU.get_fireStoneID());
-
-                    doc.set(data).addOnCompleteListener(new OnCompleteListener() {
-                        @Override
-                        public void onComplete(@NonNull Task task) {
-                            doc.update("_fireStoneID", doc.getId());
-                        }
-                    });
-
-                    for (Item item : targetSU.get_items()) {
-                        addItem(targetSU, item);
-                    }
-                }
-            }
-        );
-    }
-
-    /**
-     * Adds a new item to the storage unit item collection in firestone db
-     * @param targetSU the fireStoneID of the targeted Storage Unit
-     * @param item item to add to the firebase
-     */
-    public void addItem(StorageUnit targetSU, final Item item) {
-        if (targetSU.get_fireStoneID() == null) {
-            return;
-        }
-
-        CollectionReference items = db.collection(STORAGE_UNIT_COLLECTION_NAME).document(targetSU.get_fireStoneID()).collection(ITEMS_COLLECTION_NAME);
-
-        items.add(item).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+        doc.set(targetSU).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
-            public void onComplete(@NonNull Task<DocumentReference> task) {
-                DocumentReference itemDoc = task.getResult();
-
-                // set local item's firestoneID
-                item.set_fireStoneID(itemDoc.getId());
-
-                // update remote item's firestoneID field
-                itemDoc.update("_fireStoneID", item.get_fireStoneID());
+            public void onComplete(@NonNull Task<Void> task) {
+                doc.update("_fireStoneID", doc.getId());
             }
         });
-    }
-
-    /**
-     * Updates an item in the firestone database
-     * @param targetSU
-     * @param item
-     */
-    public void updateItem(StorageUnit targetSU, Item item) {
-        if (targetSU.get_fireStoneID() == null || item.get_fireStoneID() == null) {
-            return;
-        }
-
-        DocumentReference itemDoc = db
-            .collection(STORAGE_UNIT_COLLECTION_NAME)
-            .document(targetSU.get_fireStoneID())
-            .collection(ITEMS_COLLECTION_NAME)
-            .document(item.get_fireStoneID());
-
-        itemDoc.update("_name", item.get_name());
-        itemDoc.update("_quantity", item.get_quantity());
-        itemDoc.update("_unit", item.get_unit());
-        itemDoc.update("_expiryDate", item.get_expiryDate());
-        itemDoc.update("_iconId", item.get_iconId());
-    }
-
-    /**
-     * Removes item from the firestone database
-     * @param targetSU
-     * @param item
-     */
-    public void removeItem(StorageUnit targetSU, Item item) {
-        if (targetSU.get_fireStoneID() == null || item.get_fireStoneID() == null) {
-            return;
-        }
-
-        db.collection(STORAGE_UNIT_COLLECTION_NAME)
-                .document(targetSU.get_fireStoneID())
-                .collection(ITEMS_COLLECTION_NAME)
-                .document(item.get_fireStoneID()).delete();
-
-        item.set_fireStoneID(null);
     }
 
     /**
