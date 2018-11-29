@@ -288,6 +288,15 @@ public class StorageUnitList extends AppCompatActivity implements StorageUnitLis
         _storageUnitListAdapter.notifyDataSetChanged();
     }
 
+    public void refresh(View view) {
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            checkRemoteStorages();
+            getMissingRemoteStorageUnits();
+        } else {
+            Log.i("SU_Sync_start", "Skipping sync because not logged in.");
+        }
+    }
+
     /**
      * Called when the user selects a storage unit.
      * @param index the selected storage unit's index
