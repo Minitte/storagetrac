@@ -74,16 +74,16 @@ public class StorageUnitList extends AppCompatActivity implements StorageUnitLis
         }
 
 
+        // Initialize the view
+        initRecyclerView();
+        initButtons();
+
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             checkRemoteStorages();
             getMissingRemoteStorageUnits();
         } else {
             Log.i("SU_Sync_start", "Skipping sync because not logged in.");
         }
-
-        // Initialize the view
-        initRecyclerView();
-        initButtons();
     }
 
     /**
@@ -157,13 +157,15 @@ public class StorageUnitList extends AppCompatActivity implements StorageUnitLis
                         }
                     }
 
-                    Log.i("Start_Fetch_SU", "Added a remote borrowed Storage Unit.");
+                    Log.i("Start_Fetch_SU", "Added a remote borrowed Storage Unit. Total ");
 
                     // storage unit not found
                     db.getRemoteStorageUnit(suID, new IStorageUnitResultHandler() {
                         @Override
                         public void onStorageUnitResult(StorageUnit su) {
                             _storageUnitDatabase.add(su);
+                            _storageUnitListAdapter.notifyDataSetChanged();
+                            saveLocalDatabase();
                         }
                     });
                 }
