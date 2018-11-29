@@ -215,7 +215,6 @@ public class StorageUnitList extends AppCompatActivity implements StorageUnitLis
         // If number of storage units is empty, show add button and hide edit button
         if (_storageUnitDatabase.get_storageUnits().size() == 0) {
             addStorageButton.setVisibility(View.VISIBLE);
-            editButton.setVisibility(View.INVISIBLE);
         }
     }
 

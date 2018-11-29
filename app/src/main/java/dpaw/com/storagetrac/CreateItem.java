@@ -60,6 +60,9 @@ public class CreateItem extends AppCompatActivity implements DatePickerDialog.On
             updateViews();
         } else {
             _item = new Item();
+            _item.set_unit(QuantityUnit.UNIT); // Initialize with default quantity unit
+            TextView unitView = findViewById(R.id.unit);
+            unitView.setText(_item.get_unit().abbreviation);
         }
 
         initButtons();
