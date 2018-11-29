@@ -9,6 +9,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.ArrayList;
 
 import dpaw.com.storagetrac.R;
@@ -92,7 +94,16 @@ public class StorageUnitListAdapter extends RecyclerView.Adapter<StorageUnitList
         holder.shareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO 
+
+                // check if logged in
+                FirebaseAuth auth = FirebaseAuth.getInstance();
+
+                if (auth.getCurrentUser() == null) {
+                    // TODO go to login / register
+                    return;
+                }
+
+                // TODO open email list
             }
         });
 
