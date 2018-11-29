@@ -111,7 +111,7 @@ public class StorageUnitList extends AppCompatActivity implements StorageUnitLis
 
                 for (final StorageUnit su : remote) {
                     // no access to this storage unit now
-                    if (!data.get_ownedStorage().contains(email) && !data.get_borrowedStorage().contains(email)) {
+                    if (!data.get_ownedStorage().contains(su.get_fireStoneID()) && !data.get_borrowedStorage().contains(su.get_fireStoneID())) {
                         _storageUnitDatabase.remove(su);
                         Log.i("SU_Sync_start", "Removed a storage unit (" + su.get_name() + ") because no ownership..");
                     } else {
@@ -148,16 +148,24 @@ public class StorageUnitList extends AppCompatActivity implements StorageUnitLis
                     return;
                 }
 
-                List<String> borrowed = data.get_borrowedStorage();
+                List<String> remoteSUID = data.get_borrowedStorage();
+                remoteSUID.addAll(data.get_ownedStorage());
 
-                for (String suID : borrowed) {
+                for (String suID : remoteSUID) {
+                    boolean found = false;
+
                     for (StorageUnit su : _storageUnitDatabase.get_storageUnits()) {
                         if (suID.equals(su.get_fireStoneID())) {
-                            continue;
+                            found = true;
+                            break;
                         }
                     }
 
-                    Log.i("Start_Fetch_SU", "Added a remote borrowed Storage Unit. Total ");
+                    if (found) {
+                        continue;
+                    }
+
+                    Log.i("Start_Fetch_SU", "Added a remote borrowed Storage Unit.");
 
                     // storage unit not found
                     db.getRemoteStorageUnit(suID, new IStorageUnitResultHandler() {
