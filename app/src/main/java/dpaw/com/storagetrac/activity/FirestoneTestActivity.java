@@ -18,12 +18,12 @@ public class FirestoneTestActivity extends AppCompatActivity {
 
         FirestoneDatabaseAccess db = new FirestoneDatabaseAccess();
 
-        StorageUnit su = new StorageUnit("Ozma storage test");
+        StorageUnit su = new StorageUnit("Ozma storage test", 0);
 
-        Item carrotItem = new Item("Carrot", 30, QuantityUnit.KILOGRAMS);
-        Item waterItem = new Item("Water", 100, QuantityUnit.LITRES);
-        Item carrotItem2 = new Item("Carrot", 5, QuantityUnit.KILOGRAMS);
-        Item carrotJuice = new Item("Carrot", 10000, QuantityUnit.LITRES);
+        Item carrotItem = new Item("Carrot",0, 30, QuantityUnit.KILOGRAMS);
+        Item waterItem = new Item("Water", 0, 100, QuantityUnit.LITRES);
+        Item carrotItem2 = new Item("Carrot", 0, 5, QuantityUnit.KILOGRAMS);
+        Item carrotJuice = new Item("Carrot", 0, 10000, QuantityUnit.LITRES);
 
         su.add(carrotItem);
         su.add(waterItem);

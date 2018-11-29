@@ -209,14 +209,6 @@ public class StorageUnit implements Serializable {
     }
 
     /**
-     * Gets the list of items.
-     * @return the list of items
-     */
-    public List<Item> get_items() {
-        return _items;
-    }
-
-    /**
      * Sets the _name
      *
      * @param _name set _name to this value
