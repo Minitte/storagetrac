@@ -147,8 +147,6 @@ public class FirestoneDatabaseAccess {
 
                         UserFireStoreData userData = docSnap.toObject(UserFireStoreData.class);
 
-                        Log.i("FireStoreDB", userData.toString());
-
                         userData.get_ownedStorage().add(su.get_fireStoneID());
 
                         userDoc.set(userData);
@@ -171,7 +169,7 @@ public class FirestoneDatabaseAccess {
      * @param email target user's email
      * @param su the storage unit to add to borrowed list
      */
-    public void addToBorrowed(String email, final StorageUnit su) {
+    public void addToBorrowed(final String email, final StorageUnit su) {
         if (auth.getCurrentUser() == null) {
             return;
         }
@@ -189,14 +187,126 @@ public class FirestoneDatabaseAccess {
 
                         userData.get_ownedStorage().add(su.get_fireStoneID());
 
+                        su.get_sharedEmails().add(email);
+
+                        updateStorageUnit(su);
+
                         userDoc.set(userData);
                     } else {
                         UserFireStoreData userData = new UserFireStoreData();
 
                         userData.get_borrowedStorage().add(su.get_fireStoneID());
 
+                        su.get_sharedEmails().add(email);
+
                         userDoc.set(userData);
                     }
+                }
+            }
+        });
+    }
+
+    /**
+     * Remove storage unit id from user's owned list
+     * @param storageUnitID
+     */
+    public void removeFromOwned(final String storageUnitID) {
+        if (auth.getCurrentUser() == null) {
+            return;
+        }
+
+        final String email = auth.getCurrentUser().getEmail();
+
+        final DocumentReference userDoc = db.collection(USER_COLLETION_NAME).document(email);
+
+        userDoc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    if (task.getResult().exists()) {
+                        DocumentSnapshot docSnap = task.getResult();
+
+                        UserFireStoreData userData = docSnap.toObject(UserFireStoreData.class);
+
+                        userData.get_ownedStorage().remove(storageUnitID);
+
+                        getRemoteStorageUnit(storageUnitID, new IOnGetRemoteStorageUnitHandler() {
+                            @Override
+                            public void OnGetRemoteStorageUnit(StorageUnit su) {
+                                su.get_sharedEmails().remove(email);
+                                updateStorageUnit(su);
+                            }
+                        });
+
+                        userDoc.set(userData);
+                    }
+                } else {
+                    Log.e("FirestoreDB", "Failed to get user data");
+                }
+            }
+        });
+    }
+
+    /**
+     * Remove the storage unit id from the users borrowed list
+     * @param email
+     * @param storageUnitID
+     */
+    public void removeFromBorrowed(final String email, final String storageUnitID) {
+        if (auth.getCurrentUser() == null) {
+            return;
+        }
+
+        final DocumentReference userDoc = db.collection(USER_COLLETION_NAME).document(email);
+
+        userDoc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    if (task.getResult().exists()) {
+                        DocumentSnapshot docSnap = task.getResult();
+
+                        UserFireStoreData userData = docSnap.toObject(UserFireStoreData.class);
+
+                        userData.get_borrowedStorage().remove(storageUnitID);
+
+                        getRemoteStorageUnit(storageUnitID, new IOnGetRemoteStorageUnitHandler() {
+                            @Override
+                            public void OnGetRemoteStorageUnit(StorageUnit su) {
+                                su.get_sharedEmails().remove(email);
+                                updateStorageUnit(su);
+                            }
+                        });
+
+                        userDoc.set(userData);
+                    }
+                } else {
+                    Log.e("FirestoreDB", "Failed to get user data");
+                }
+            }
+        });
+    }
+
+    /**
+     * Gets a remote storage unit from the firestore db server
+     * @param storageUnitID
+     * @param handler
+     */
+    public void getRemoteStorageUnit(String storageUnitID, final IOnGetRemoteStorageUnitHandler handler) {
+        if (auth.getCurrentUser() == null) {
+            return;
+        }
+
+        DocumentReference suDoc = db.collection(STORAGE_UNIT_COLLECTION_NAME).document(storageUnitID);
+
+        suDoc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful() && task.getResult().exists()) {
+                    StorageUnit su = task.getResult().toObject(StorageUnit.class);
+                    handler.OnGetRemoteStorageUnit(su);
+                } else {
+                    handler.OnGetRemoteStorageUnit(null);
                 }
             }
         });
