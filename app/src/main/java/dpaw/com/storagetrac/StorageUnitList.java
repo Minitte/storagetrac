@@ -133,6 +133,10 @@ public class StorageUnitList extends AppCompatActivity implements StorageUnitLis
         _storageUnitListAdapter.notifyDataSetChanged();
     }
 
+    /**
+     * Called when the user selects a storage unit.
+     * @param index the selected storage unit's index
+     */
     @Override
     public void selectStorageUnit(int index) {
         // Pack the selected storage unit into an intent

@@ -30,41 +30,69 @@ import dpaw.com.storagetrac.ui.QuantityDialogListener;
 import dpaw.com.storagetrac.ui.StorageUnitDialogFragment;
 
 /**
- * Activity for creating items.
+ * Activity for creating or editing items.
  */
 public class CreateItem extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, ItemDialogListener, QuantityDialogListener {
 
     /**
      * Name of the item.
      */
-    private String _itemName;
+    private Item _item;
 
     /**
-     * Icon of the item.
+     * Index of the item in its storage unit.
      */
-    private int _itemIcon;
-
-    /**
-     * Quantity of the item.
-     */
-    private double _quantity;
-
-    /**
-     * The type of unit for the item quantity.
-     */
-    private QuantityUnit _unit;
-
-    /**
-     * Expiration date of the item.
-     */
-    private Date _expiryDate;
+    private int _index;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_item);
 
+        // Retrieve item from the intent
+        Intent intent = getIntent();
+        Item item = (Item)intent.getSerializableExtra("item");
+        _index = intent.getIntExtra("index", -1);
+
+        // Item not being null means this is an edit
+        if (item != null) {
+            _item = item;
+            updateViews();
+        } else {
+            _item = new Item();
+        }
+
         initButtons();
+    }
+
+    /**
+     * Updates the view text fields with the item properties.
+     */
+    private void updateViews() {
+        EditText nameView = findViewById(R.id.name);
+        ImageButton iconView = findViewById(R.id.itemIcon);
+        EditText quantityView = findViewById(R.id.quantity);
+        TextView unitView = findViewById(R.id.unit);
+        TextView dateView = findViewById(R.id.date);
+
+        // Set view texts
+        nameView.setText(_item.get_name());
+        iconView.setImageResource(_item.get_iconId());
+        quantityView.setText("" + (int)_item.get_quantity());
+
+        // Set quantity unit if it exists
+        if (_item.get_unit() != null) {
+            unitView.setText(_item.get_unit().abbreviation);
+        }
+
+
+        // Set expiry date if it exists
+        if (_item.get_expiryDate() != null) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(_item.get_expiryDate());
+            dateView.setText(calendar.getTime().toString());
+        }
+
     }
 
     /**
@@ -81,14 +109,24 @@ public class CreateItem extends AppCompatActivity implements DatePickerDialog.On
             @Override
             public void onClick(View v) {
                 if (validateInput()) {
-                    // Create a new item
-                    Item item = new Item(_itemName, _itemIcon, _quantity, _unit, _expiryDate);
+                    EditText nameView = findViewById(R.id.name);
+                    ImageButton iconView = findViewById(R.id.itemIcon);
+                    EditText quantityView = findViewById(R.id.quantity);
 
-                    // Pack the new item into an intent
+                    // Update item properties
+                    _item.set_name(nameView.getText().toString());
+                    _item.set_quantity(Integer.parseInt(quantityView.getText().toString()));
+                    if (iconView.getTag() != null) { // Image is optional
+                        _item.set_iconId(getApplicationContext().getResources().getIdentifier
+                                (iconView.getTag().toString(), "drawable", getApplicationContext().getPackageName()));
+                    }
+
+                    // Pack the item into an intent
                     Bundle bundle = new Bundle();
                     Intent intent = new Intent(getApplicationContext(), StorageUnitActivity.class);
-                    bundle.putSerializable("item", item);
+                    bundle.putSerializable("item", _item);
                     intent.putExtras(bundle);
+                    intent.putExtra("index", _index);
 
                     // Pass it back to the storage unit activity
                     setResult(RESULT_OK, intent);
@@ -109,6 +147,7 @@ public class CreateItem extends AppCompatActivity implements DatePickerDialog.On
         pickDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Start a date picker dialog
                 DialogFragment datePicker = new DatePickerFragment();
                 datePicker.show(getFragmentManager(), "Date Picker");
             }
@@ -117,6 +156,7 @@ public class CreateItem extends AppCompatActivity implements DatePickerDialog.On
         pickIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Start an icon picker dialog
                 ItemDialogFragment icons = new ItemDialogFragment();
                 icons.show(getFragmentManager(), "Choose an icon");
             }
@@ -125,6 +165,7 @@ public class CreateItem extends AppCompatActivity implements DatePickerDialog.On
         pickUnit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Start a quantity type dialog
                 QuantityDialogFragment quantity = new QuantityDialogFragment();
                 quantity.show(getFragmentManager(), "Choose a quantity type");
             }
@@ -136,26 +177,29 @@ public class CreateItem extends AppCompatActivity implements DatePickerDialog.On
      * @return true if input is valid, otherwise false
      */
     private boolean validateInput() {
+        // References to the views
         EditText nameView = findViewById(R.id.name);
         ImageButton iconView = findViewById(R.id.itemIcon);
         EditText quantityView = findViewById(R.id.quantity);
         TextView unitView = findViewById(R.id.unit);
         TextView dateView = findViewById(R.id.date);
 
-        // Make sure all required input is not empty
+        // Check if all required input is not empty
         if (nameView.getText().length() > 0 && quantityView.getText().length() > 0
-                && unitView.getText().length() > 0 && dateView.getText().length() > 0
-                && iconView.getDrawable() != null) {
-            _itemName = nameView.getText().toString();
-            _itemIcon = getApplicationContext().getResources().getIdentifier(iconView.getTag().toString(), "drawable", getApplicationContext().getPackageName());
-            _quantity = Integer.parseInt(quantityView.getText().toString());
-
+                && unitView.getText().length() > 0 && dateView.getText().length() > 0) {
             return true;
         } else {
             return false;
         }
     }
 
+    /**
+     * Sets the expiry date of the item.
+     * @param datePicker the date picker dialog
+     * @param year the expiry year
+     * @param month the expiry month
+     * @param day the expiry day
+     */
     @Override
     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
         // Create new calendar instance
@@ -165,11 +209,16 @@ public class CreateItem extends AppCompatActivity implements DatePickerDialog.On
         calendar.set(Calendar.DAY_OF_MONTH, day);
 
         // Set expiry date to calendar's date
-        _expiryDate = calendar.getTime();
+        _item.set_expiryDate(calendar.getTime());
         TextView expiryDateView = findViewById(R.id.date);
-        expiryDateView.setText(_expiryDate.toString());
+        expiryDateView.setText(calendar.getTime().toString());
     }
 
+    /**
+     * Called when the user selects an icon in the icon picker dialog.
+     * @param image the image selected
+     * @param tag the tag of the image, used for referencing drawables
+     */
     @Override
     public void selectImage(Drawable image, Object tag) {
         // Update the image icon to the user selection
@@ -178,9 +227,14 @@ public class CreateItem extends AppCompatActivity implements DatePickerDialog.On
         iconView.setTag(tag);
     }
 
+    /**
+     * Called when the user selects a quantity type in the quantity dialog.
+     * @param unit the quantity unit selected
+     */
     @Override
     public void selectQuantityUnit(QuantityUnit unit) {
-        _unit = unit;
+        // Update the quantity unit to the user selection
+        _item.set_unit(unit);
         TextView unitView = findViewById(R.id.unit);
         unitView.setText(unit.abbreviation);
     }

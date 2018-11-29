@@ -31,7 +31,9 @@ public class StorageUnitAdapter extends RecyclerView.Adapter<StorageUnitAdapter.
      */
     private ArrayList<Item> _items;
 
-    public static class StorageUnitViewHolder extends RecyclerView.ViewHolder {
+    private static StorageUnitListener _storageUnitListener;
+
+    public static class StorageUnitViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         // List of data that's contained in each storage unit
         public ImageView image;
         public ImageView warning;
@@ -50,6 +52,12 @@ public class StorageUnitAdapter extends RecyclerView.Adapter<StorageUnitAdapter.
             quantity = itemView.findViewById(R.id.itemQuantity);
             warning = itemView.findViewById(R.id.warning);
             expiry = itemView.findViewById(R.id.itemExpiry);
+            itemView.setOnClickListener(this); // Set the on click listener
+        }
+
+        @Override
+        public void onClick(View view) {
+            _storageUnitListener.selectItem(this.getAdapterPosition());
         }
     }
 
@@ -57,8 +65,9 @@ public class StorageUnitAdapter extends RecyclerView.Adapter<StorageUnitAdapter.
      * Constructor.
      * @param storageUnit reference to the storage unit
      */
-    public StorageUnitAdapter(StorageUnit storageUnit) {
+    public StorageUnitAdapter(StorageUnit storageUnit, StorageUnitListener adapterListener) {
         _items = (ArrayList<Item>)storageUnit.get_items();
+        _storageUnitListener = adapterListener;
     }
 
     @NonNull
@@ -99,6 +108,7 @@ public class StorageUnitAdapter extends RecyclerView.Adapter<StorageUnitAdapter.
                 holder.warning.setVisibility(View.VISIBLE); // Show warning
             } else {
                 holder.expiry.setText("Expires in " + daysDiff + " day(s)");
+                holder.warning.setVisibility(View.VISIBLE); // Hide warning
             }
         }
     }

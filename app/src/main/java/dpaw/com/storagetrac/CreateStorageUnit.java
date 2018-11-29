@@ -86,6 +86,11 @@ public class CreateStorageUnit extends AppCompatActivity implements StorageUnitD
         });
     }
 
+    /**
+     * Called when the user selects an icon in the icon picker dialog.
+     * @param image the image selected
+     * @param tag the tag of the image, used for referencing drawables
+     */
     @Override
     public void selectImage(Drawable image, Object tag) {
         _storageIcon.setImageDrawable(image);

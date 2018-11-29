@@ -20,11 +20,12 @@ import dpaw.com.storagetrac.data.QuantityUnit;
 import dpaw.com.storagetrac.data.StorageUnit;
 import dpaw.com.storagetrac.ui.StorageUnitAdapter;
 import dpaw.com.storagetrac.ui.StorageUnitListAdapter;
+import dpaw.com.storagetrac.ui.StorageUnitListener;
 
 /**
  * Activity for displaying items inside a storage unit.
  */
-public class StorageUnitActivity extends AppCompatActivity {
+public class StorageUnitActivity extends AppCompatActivity implements StorageUnitListener {
 
     /**
      * The currently opened storage unit.
@@ -66,7 +67,7 @@ public class StorageUnitActivity extends AppCompatActivity {
      */
     private void initRecyclerView() {
         RecyclerView recyclerView = findViewById(R.id.itemView);
-        _storageUnitAdapter = new StorageUnitAdapter(_storageUnit);
+        _storageUnitAdapter = new StorageUnitAdapter(_storageUnit, this);
         recyclerView.setAdapter(_storageUnitAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -106,6 +107,7 @@ public class StorageUnitActivity extends AppCompatActivity {
      */
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        // Creating a new item
         if (requestCode == 1) {
             if(resultCode == RESULT_OK) {
                 // Add the new item
@@ -113,6 +115,40 @@ public class StorageUnitActivity extends AppCompatActivity {
                 addItemToStorage(newItem);
             }
         }
+
+        // Editing an existing item
+        if (requestCode == 2) {
+            if(resultCode == RESULT_OK) {
+                // Get information from the intent
+                Item newItem = (Item)data.getSerializableExtra("item");
+                int index = data.getIntExtra("index", -1);
+
+                // Replace item if index is valid
+                if (index != -1) {
+                    _storageUnit.get_items().set(index, newItem);
+                    _storageUnitAdapter.notifyDataSetChanged();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Something went wrong.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
     }
 
+    /**
+     * Called when the user presses on an item.
+     * @param index the selected item's index
+     */
+    @Override
+    public void selectItem(int index) {
+        Intent intent = new Intent(this, CreateItem.class);
+
+        // Pack item into the intent
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("item", _storageUnit.get_items().get(index));
+        intent.putExtras(bundle);
+        intent.putExtra("index", index);
+
+        // Start the item edit activity
+        startActivityForResult(intent, 2);
+    }
 }

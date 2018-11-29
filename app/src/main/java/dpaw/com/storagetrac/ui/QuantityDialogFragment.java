@@ -21,6 +21,9 @@ import dpaw.com.storagetrac.data.QuantityUnit;
  */
 public class QuantityDialogFragment extends DialogFragment {
 
+    /**
+     * Listener that handles communication between this dialog and the create item activity.
+     */
     private QuantityDialogListener _quantityDialogListener;
 
     @Override
@@ -34,6 +37,7 @@ public class QuantityDialogFragment extends DialogFragment {
         // Build the dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
+        // List of possible inputs
         final String[] units = {
                 QuantityUnit.UNIT.abbreviation,
                 QuantityUnit.TON.abbreviation,
@@ -46,6 +50,8 @@ public class QuantityDialogFragment extends DialogFragment {
                 QuantityUnit.CUPS.abbreviation,
                 QuantityUnit.LITRES.abbreviation,
                 QuantityUnit.MILLILITRES.abbreviation};
+
+        // Set the on click listener
         builder.setItems(units, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

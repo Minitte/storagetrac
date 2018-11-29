@@ -27,5 +27,6 @@
     <string name="unit">Unit:</string>
     <string name="warning">Warning</string>
     <string name="expiry_date">Expiry date:</string>
+    <string name="title_activity_edit_item">EditItem</string>
 
 </resources>

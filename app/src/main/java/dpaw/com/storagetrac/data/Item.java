@@ -39,6 +39,11 @@ public class Item implements Serializable {
     private Date _expiryDate;
 
     /**
+     * Default constructor.
+     */
+    public Item() {}
+
+    /**
      * Constructor for an item object
      * The unit will be set to default unit.
      * @param name name of the item
