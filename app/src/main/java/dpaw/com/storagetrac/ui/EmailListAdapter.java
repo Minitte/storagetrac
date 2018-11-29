@@ -10,7 +10,9 @@ import java.util.List;
 
 import dpaw.com.storagetrac.R;
 import dpaw.com.storagetrac.data.StorageUnit;
+import dpaw.com.storagetrac.data.UserFireStoreData;
 import dpaw.com.storagetrac.database.Firestone.FirestoneDatabaseAccess;
+import dpaw.com.storagetrac.database.Firestone.IUserDataResultHandler;
 
 public class EmailListAdapter extends RecyclerView.Adapter<EmailHolder> {
 
@@ -40,11 +42,26 @@ public class EmailListAdapter extends RecyclerView.Adapter<EmailHolder> {
         holder.deleteButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                String removed = storageUnit.get_sharedEmails().remove(position);
+                final String removedEmail = storageUnit.get_sharedEmails().remove(position);
 
-                db.removeFromBorrowed(emailHolder.emailText.getText().toString(), storageUnit.get_fireStoneID());
+                db.getRemoteUserData(removedEmail, new IUserDataResultHandler() {
+                    @Override
+                    public void onUserDataResult(UserFireStoreData data) {
+                        if (data == null) {
+                            data = new UserFireStoreData();
+                        }
 
-                notifyDataSetChanged();
+                        // remove this storage unit from the user's borrowed list
+                        data.get_borrowedStorage().remove(storageUnit.get_fireStoneID());
+                        db.setRemoteUserData(removedEmail, data, null);
+
+                        // remove user from share list
+                        storageUnit.removeShared(removedEmail);
+                        db.setStorageUnit(storageUnit, null);
+
+                        notifyDataSetChanged();
+                    }
+                });
             }
         });
     }

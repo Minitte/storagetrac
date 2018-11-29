@@ -94,22 +94,6 @@ public class StorageUnit implements Serializable {
     }
 
     /**
-     * Attempts to remove the item from the list
-     * @param id firestone id of the item to remove
-     * @return if the item removal was successful
-     */
-    public boolean remove(String id) {
-        Item match = findItemByID(id);
-
-        if (match != null) {
-            _items.remove(match);
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
      * Searches the list of a matching item by id
      * @param item item to search for
      * @return returns the first item that matches or a null if none found
@@ -121,23 +105,6 @@ public class StorageUnit implements Serializable {
            if (cur.equals(item)) {
                return cur;
            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Searches the list of a matching item by id
-     * @param id firestone id of the storage unit to remove
-     * @return returns the first item that matches or a null if none found
-     */
-    public Item findItemByID(String id) {
-        // search for item
-        for (Item cur : _items) {
-            // compare by name and expiry
-            if (cur.get_fireStoneID() == id) {
-                return cur;
-            }
         }
 
         return null;
@@ -158,6 +125,19 @@ public class StorageUnit implements Serializable {
         }
 
         return null;
+    }
+
+    /**
+     * Removes a shared email
+     * @param email
+     */
+    public void removeShared(String email) {
+        for (int i = 0; i < _sharedEmails.size(); i++) {
+            if (_sharedEmails.get(i).equals(email)) {
+                _sharedEmails.remove(i);
+                return;
+            }
+        }
     }
 
     /**

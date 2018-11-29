@@ -2,7 +2,7 @@ package dpaw.com.storagetrac.database.Firestone;
 
 import dpaw.com.storagetrac.data.UserFireStoreData;
 
-public interface IOnGetRemoteUserDataHandler {
+public interface IUserDataResultHandler {
 
-    void onGetRemoteUserData(UserFireStoreData data);
+    void onUserDataResult(UserFireStoreData data);
 }

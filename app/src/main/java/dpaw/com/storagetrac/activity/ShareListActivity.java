@@ -7,11 +7,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.EditText;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.List;
 
 import dpaw.com.storagetrac.R;
 import dpaw.com.storagetrac.data.StorageUnit;
+import dpaw.com.storagetrac.data.UserFireStoreData;
 import dpaw.com.storagetrac.database.Firestone.FirestoneDatabaseAccess;
+import dpaw.com.storagetrac.database.Firestone.IStorageUnitResultHandler;
+import dpaw.com.storagetrac.database.Firestone.IUserDataResultHandler;
 import dpaw.com.storagetrac.ui.EmailListAdapter;
 
 public class ShareListActivity extends AppCompatActivity {
@@ -61,30 +66,64 @@ public class ShareListActivity extends AppCompatActivity {
      * @param view
      */
     public void addEmailFromField(View view) {
-        // spilt to allow example@email.com, hello@world.ca, etc@etc.org
-        String[] emails = emailField.getText().toString().split(",");
+
+        final String email = emailField.getText().toString();
 
         // fast referance to list
-        List<String> shared = storageUnit.get_sharedEmails();
+        final List<String> shared = storageUnit.get_sharedEmails();
 
         // database object
-        FirestoneDatabaseAccess db = new FirestoneDatabaseAccess();
+        final FirestoneDatabaseAccess db = new FirestoneDatabaseAccess();
 
-        if (storageUnit.get_sharedEmails().size() + emails.length > 0) {
-            db.addStorageUnit(storageUnit);
-        }
+        final boolean firstTime = storageUnit.get_fireStoneID() == null;
 
-        // add all non existing emails
-        for (int i = 0; i < emails.length; i++) {
-            if (!shared.contains(emails[i])) {
-                db.addToBorrowed(emails[i], storageUnit);
-                shared.add(emails[i]);
+        // get user data
+        db.getRemoteUserData(email, new IUserDataResultHandler() {
+            @Override
+            public void onUserDataResult(UserFireStoreData data) {
+                if (data == null) {
+                    data = new UserFireStoreData();
+                }
+
+                final UserFireStoreData userData = data;
+
+                // add to shared list
+                storageUnit.get_sharedEmails().add(email);
+                db.setStorageUnit(storageUnit, new IStorageUnitResultHandler() {
+                    @Override
+                    public void onStorageUnitResult(StorageUnit su) {
+                        // set borrowed
+                        userData.get_borrowedStorage().add(storageUnit.get_fireStoneID());
+                        db.setRemoteUserData(email, userData, null);
+
+                        // owner email
+                        final String ownerEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+
+                        // get owner user data
+                        db.getRemoteUserData(ownerEmail, new IUserDataResultHandler() {
+                            @Override
+                            public void onUserDataResult(UserFireStoreData data) {
+                                if (data == null) {
+                                    data = new UserFireStoreData();
+                                }
+
+                                // add storage unit id to ownership list
+                                data.get_ownedStorage().add(storageUnit.get_fireStoneID());
+
+                                // set to database
+                                db.setRemoteUserData(ownerEmail, data, null);
+
+                                // clear text
+                                emailField.setText("");
+
+                                adapter.notifyDataSetChanged();
+
+                                
+                            }
+                        });
+                    }
+                });
             }
-        }
-
-        adapter.notifyDataSetChanged();
-
-        // clear text
-        emailField.setText("");
+        });
     }
 }

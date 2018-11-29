@@ -4,23 +4,18 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import dpaw.com.storagetrac.R;
 import dpaw.com.storagetrac.data.Item;
 import dpaw.com.storagetrac.data.QuantityUnit;
 import dpaw.com.storagetrac.data.StorageUnit;
-import dpaw.com.storagetrac.data.UserFireStoreData;
 import dpaw.com.storagetrac.database.Firestone.FirestoneDatabaseAccess;
-import dpaw.com.storagetrac.database.Firestone.IOnGetRemoteStorageUnitHandler;
-import dpaw.com.storagetrac.database.Firestone.IOnGetRemoteUserDataHandler;
+import dpaw.com.storagetrac.database.Firestone.IStorageUnitResultHandler;
 
 public class FirestoneTestActivity extends AppCompatActivity {
 
@@ -62,16 +57,16 @@ public class FirestoneTestActivity extends AppCompatActivity {
 
 //        db.addStorageUnit(su);
 
-        db.getRemoteStorageUnit("VUhqeDM9700YBVD0c4TO", new IOnGetRemoteStorageUnitHandler() {
+        db.getRemoteStorageUnit("VUhqeDM9700YBVD0c4TO", new IStorageUnitResultHandler() {
             @Override
-            public void OnGetRemoteStorageUnit(StorageUnit su) {
+            public void onStorageUnitResult(StorageUnit su) {
 
             }
         });
 
-//        db.getRemoteUserData("test1@hello.com", new IOnGetRemoteUserDataHandler() {
+//        db.getRemoteUserData("test1@hello.com", new IUserDataResultHandler() {
 //            @Override
-//            public void onGetRemoteUserData(UserFireStoreData data) {
+//            public void onUserDataResult(UserFireStoreData data) {
 //
 //            }
 //        });
