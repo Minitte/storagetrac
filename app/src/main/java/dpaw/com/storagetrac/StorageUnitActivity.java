@@ -151,7 +151,7 @@ public class StorageUnitActivity extends AppCompatActivity implements StorageUni
             }
         }
 
-        if (resultCode == 1 || resultCode == 2) {
+        if (requestCode == 1 || requestCode == 2) {
             if (_storageUnit.get_fireStoneID() != null) {
 
                 FirestoneDatabaseAccess db = new FirestoneDatabaseAccess();
