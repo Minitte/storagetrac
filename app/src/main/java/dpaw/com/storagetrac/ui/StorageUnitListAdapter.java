@@ -35,6 +35,7 @@ public class StorageUnitListAdapter extends RecyclerView.Adapter<StorageUnitList
         public ImageView image;
         public TextView name;
         public ImageButton deleteButton;
+        public ImageButton shareButton;
 
         /**
          * Constructor for creating a new list item view.
@@ -45,6 +46,7 @@ public class StorageUnitListAdapter extends RecyclerView.Adapter<StorageUnitList
             image = itemView.findViewById(R.id.storageUnitImage);
             name = itemView.findViewById(R.id.storageUnitName);
             deleteButton = itemView.findViewById(R.id.deleteButton);
+            shareButton = itemView.findViewById(R.id.shareButton);
             itemView.setOnClickListener(this); // Set the on click listener
         }
 
@@ -87,10 +89,19 @@ public class StorageUnitListAdapter extends RecyclerView.Adapter<StorageUnitList
             }
         });
 
+        holder.shareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO 
+            }
+        });
+
         if (StorageUnitList.editing) {
             holder.deleteButton.setVisibility(View.VISIBLE);
+            holder.shareButton.setVisibility(View.VISIBLE);
         } else {
             holder.deleteButton.setVisibility(View.INVISIBLE);
+            holder.shareButton.setVisibility(View.INVISIBLE);
         }
     }
 
