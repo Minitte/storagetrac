@@ -45,6 +45,7 @@ public class FirestoneDatabaseAccess {
 
         data.put("Name", su.get_name());
         data.put("_id", su.get_id());
+        data.put("_iconId", su.get_iconId());
         data.put("_fireStoneID", su.get_fireStoneID());
 
         final DocumentReference doc = db.collection(STORAGE_UNIT_COLLECTION_NAME).document();
@@ -80,6 +81,7 @@ public class FirestoneDatabaseAccess {
 
                     data.put("Name", targetSU.get_name());
                     data.put("_id", targetSU.get_id());
+                    data.put("_iconId", targetSU.get_iconId());
                     data.put("_fireStoneID", targetSU.get_fireStoneID());
 
                     final DocumentReference doc = db.collection(STORAGE_UNIT_COLLECTION_NAME).document(targetSU.get_fireStoneID());
@@ -145,6 +147,7 @@ public class FirestoneDatabaseAccess {
         itemDoc.update("_quantity", item.get_quantity());
         itemDoc.update("_unit", item.get_unit());
         itemDoc.update("_expiryDate", item.get_expiryDate());
+        itemDoc.update("_iconId", item.get_iconId());
     }
 
     /**
