@@ -1,6 +1,10 @@
 language: android
+
+before_install:
+ - chmod +x gradlew
+ 
 jdk: oraclejdk8
-sudo: false
+#sudo: false
 
 android:
   components:
